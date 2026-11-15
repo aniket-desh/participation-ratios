@@ -24,6 +24,18 @@ The model is that of derivations §5.1. Each head has $(a_1,a_2,\beta,\kappa,g)$
 
 **Controls (primary generator, to τ = 300).** Readout-only training leaves PR exactly at 2.04433, as it must, because the measured residual does not depend on the readout. Frozen attention (readout and MLP gain $g$ train) moves PR by at most 0.0007 (2.0438–2.0450). Full training lowers PR to 2.0202 at τ ≈ 190 and to 2.0220 by τ = 300. The final losses are 1.21895, 1.21844 and 1.21765 nats, so attention learning buys both the lower loss and the change in representation geometry.
 
+## Dependent generators: the interaction extension (derivations §5.14, plan §4.2)
+
+[`coupled.py`](coupled.py) runs the continuum (17² cubature, T = 3, τ = 300) on the coupled generator $P_\varepsilon=(1-\varepsilon)P_1\otimes P_2+\varepsilon P_{\mathrm{corr}}$ (c = 0.8, ρ = 0.8, $q_1=q_2=0.5$), with and without the interaction logit $y_1y_2f_{12}$ (b(0) = 0). Results are in [`results/coupled.json`](results/coupled.json). The factorization gap is the smallest excess loss any factorized predictor can reach, $\mathbb E_c\,\mathrm{KL}(P\,\|\,P_1P_2)$, computed exactly at T = 3.
+
+| ε | factorization gap (nats) | excess loss, factorized model | excess loss, with interaction | PR(S), factorized | PR(S), with interaction |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 0 | 0.00039 | 0.00084 | 2.045 | 2.094 |
+| 0.05 | 0.00017 | 0.00048 | 0.00087 | 2.054 | 2.108 |
+| 0.2 | 0.00228 | 0.00295 | 0.00099 | 2.071 | 2.111 |
+
+At ε = 0.2 the interaction model is ahead from τ = 10 on, and ends below the factorization gap. So it has learned interaction content that no factorized predictor could use. At ε = 0 and 0.05 it is still behind the factorized model at τ = 300: the gap to win is zero or smaller than both models' remaining optimization error, and the extra interaction gradient slows the shared head parameters. The residual PR is higher with the interaction logit **in every case, including the independent generator** (2.094 against 2.045 at ε = 0). A PR increase therefore does not by itself identify interaction content, which is the warning in plan §4.2. Here the higher PR comes from how the interaction gradient reshapes the shared attention and MLP parameters, not from anything the generator requires. These are single continuum trajectories at one horizon. Longer horizons and finite-H checks were not run.
+
 ## How it was checked
 
 - **Independent fact-check of this write-up** against `results/*.json`: all headline numbers held. It added seed-bootstrap intervals for the H exponents, corrected the weak-signal ratios (16× is reached only as ε shrinks), and removed an untested attribution of the sweep generators' PR phases to readout and attention learning.
@@ -36,5 +48,4 @@ The model is that of derivations §5.1. Each head has $(a_1,a_2,\beta,\kappa,g)$
 
 - **Longer horizons.** §5.11's constants can grow with τ, and only τ ≤ 100 was compared against finite networks. Rerunning `finite` with `TAU = 300` would take about 1 hour of CPU.
 - **The candidate Gaussian fluctuation theory (§5.12).** It predicts the PR variance across seeds at each H, and comparing it with the seed spread in panel (a) would test it. It is not implemented.
-- **Dependent generators.** The interaction extension (§5.14) is implemented and tested (`prt/heads.py`, `velocity_int`), but no continuum run on a coupled generator has been made.
 - **Transfer to the dense transformer.** The connection to Batch 2's dense transformer is untested. This model fixes the value features and has no cross-head mixing.
