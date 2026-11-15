@@ -36,6 +36,19 @@ The model is that of derivations §5.1. Each head has $(a_1,a_2,\beta,\kappa,g)$
 
 At ε = 0.2 the interaction model is ahead from τ = 10 on, and ends below the factorization gap. So it has learned interaction content that no factorized predictor could use. At ε = 0 and 0.05 it is still behind the factorized model at τ = 300: the gap to win is zero or smaller than both models' remaining optimization error, and the extra interaction gradient slows the shared head parameters. The residual PR is higher with the interaction logit **in every case, including the independent generator** (2.094 against 2.045 at ε = 0). A PR increase therefore does not by itself identify interaction content, which is the warning in plan §4.2. Here the higher PR comes from how the interaction gradient reshapes the shared attention and MLP parameters, not from anything the generator requires. These are single continuum trajectories at one horizon. Longer horizons and finite-H checks were not run.
 
+## Initialization fluctuations (derivations §5.12–5.13)
+
+At τ = 0 the heads are iid, so the seed-to-seed spread of a finite network's PR is predicted, to leading order, by $\mathrm{SD}(\mathrm{PR}_H)\approx H^{-1/2}\,\mathrm{SD}_{\theta\sim\nu_0}\big(DR_S[P^{1/2}\Xi(\theta)P^{1/2}]\big)$, with the SD over the initial law computed by 48² cubature. [`fluctuations.py`](fluctuations.py) compares this with 2,000 independently drawn networks per H (results in [`results/fluctuations.json`](results/fluctuations.json)):
+
+| H | predicted SD | observed SD (2,000 inits) | ratio | mean PR − continuum PR |
+| --- | --- | --- | --- | --- |
+| 16 | 0.01288 | 0.01347 ± 0.00021 | 1.046 | −0.00507 |
+| 64 | 0.00644 | 0.00648 ± 0.00010 | 1.006 | −0.00120 |
+| 256 | 0.00322 | 0.00316 ± 0.00005 | 0.982 | −0.00035 |
+| 1,024 | 0.00161 | 0.00158 ± 0.00003 | 0.984 | −0.00011 |
+
+The linearized fluctuation formula predicts the spread to within 2% for H ≥ 64. The 4.6% excess at H = 16 is consistent with the second-order terms the linearization drops. The mean shows a small negative bias of order 1/H, which §5.11's argument neither predicts nor excludes (it bounds only the RMS error). A first comparison against the 8–16 training seeds of the finite-H study showed spreads 11–38% above the prediction (pooled variance ratio 1.55, χ² p = 0.011 on 44 df). With 2,000 draws per H that excess disappears, so it was sampling noise in the seed SD. This checks the fluctuation theory at initialization only. The trained-time fluctuation equation of §5.12 is not implemented.
+
 ## How it was checked
 
 - **Independent fact-check of this write-up** against `results/*.json`: all headline numbers held. It added seed-bootstrap intervals for the H exponents, corrected the weak-signal ratios (16× is reached only as ε shrinks), and removed an untested attribution of the sweep generators' PR phases to readout and attention learning.
@@ -47,5 +60,5 @@ At ε = 0.2 the interaction model is ahead from τ = 10 on, and ends below the f
 ## Not yet checked
 
 - **Longer horizons.** §5.11's constants can grow with τ, and only τ ≤ 100 was compared against finite networks. Rerunning `finite` with `TAU = 300` would take about 1 hour of CPU.
-- **The candidate Gaussian fluctuation theory (§5.12).** It predicts the PR variance across seeds at each H, and comparing it with the seed spread in panel (a) would test it. It is not implemented.
+- **The trained-time fluctuation theory (§5.12).** Its initialization limit is checked above. Propagating the linear fluctuation equation in time, and comparing it with the trained seed spread at τ = 100, is not implemented.
 - **Transfer to the dense transformer.** The connection to Batch 2's dense transformer is untested. This model fixes the value features and has no cross-head mixing.
