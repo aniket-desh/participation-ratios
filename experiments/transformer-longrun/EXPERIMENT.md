@@ -1,7 +1,7 @@
 ---
 name: transformer-longrun
 title: Batch 2b: does the m-isometric belief metric persist with longer training?
-status: approved
+status: done
 gpu: NVIDIA A40,NVIDIA RTX A6000,NVIDIA GeForce RTX 5090,NVIDIA A100 80GB PCIe
 count: 1
 hours: 3
@@ -10,6 +10,9 @@ disk_gb: 40
 data:
 secrets:
 approved_utc: 2026-11-15T22:52:09Z
+result: supported
+finished_utc: 2026-11-15T23:45:47Z
+writeup: experiments/transformer-longrun/README.md
 ---
 
 # Batch 2b: does the m-isometric belief metric persist with longer training?
@@ -100,4 +103,14 @@ None.
 
 ## Outcome
 
-Not run yet.
+**Supported: stable m-isometry** (pre-registered rules, site `L0.resid_post`). Write-up: [README.md](README.md); grading: [grade.json](grade.json).
+
+- Run succeeded: met, 12/12 runs reached 50,000 steps with analysis at 20k and 50k.
+- KL filter: 12/12 below the k = 4 floor (last-quarter tail mean 22–29% of the floor at q2 = 0.25/0.5, 52–63% at q2 = 0.8); none flagged.
+- Stable m-isometry: met. 11/12 in band at 50k (92%; q2 = 0.8 seed 0 at 0.612), m closer than u in 9/9 anisotropic runs, median |Δ top eig (m)| 20k→50k = 0.019.
+- Drift: not met. The u-minus-m gap shrank in 4/9 anisotropic runs (all at q2 = 0.8), below the 80% needed for "toward u".
+- PR(C_h) settling (reported): not settled; median relative change 40k→50k −2.7%, 11/12 fell.
+- Reproducibility vs Batch 2 at 20k (reported): seeds 0–2 agree to within 1.1e-4 (top eig) and 0.01% (PR(C_h)).
+- q2 = 0.8 seeds 3–5 (reported): 0.504, 0.545, 0.550 at 20k, all in band; Batch 2's outlier (seed 2) returned to the band by 40k, while seed 0 left it at 50k. Batch 2's every-run H1 rule fails at 50k on two runs.
+- Belief PR / m-isometric prediction (reported): 0.992–1.001 at q2 = 0.25/0.5 and 0.880–0.978 at q2 = 0.8 at 50k.
+- Cost and runtime: one A40, 47 min, about $0.46, against $8 and 3 h.
