@@ -1,0 +1,1 @@
+{"out": "runs/transformer-ablations/nomlp_pilot_lr1e-4", "final": {"ce": 1.3205397799334468, "kl": 0.001599085097274048, "kl_final": 0.0015285908775108214, "ce_final": 1.320167175459634}, "seconds": 180.60528016090393}

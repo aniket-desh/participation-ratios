@@ -1,0 +1,2 @@
+step_000000 {'L0.resid_pre': 2.9, 'L0.attn_out': 3.727, 'L0.resid_mid': 2.996, 'L0.resid_post': 2.996}
+step_020000 {'L0.resid_pre': 2.908, 'L0.attn_out': 2.542, 'L0.resid_mid': 3.245, 'L0.resid_post': 3.245}

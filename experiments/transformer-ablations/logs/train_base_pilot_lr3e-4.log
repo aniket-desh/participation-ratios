@@ -1,0 +1,1 @@
+{"out": "runs/transformer-ablations/base_pilot_lr3e-4", "final": {"ce": 1.3192751414184176, "kl": 0.0005218225808078503, "kl_final": 0.00041315836467556823, "ce_final": 1.3190264536946783}, "seconds": 210.72467756271362}
