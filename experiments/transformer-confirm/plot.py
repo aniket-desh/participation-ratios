@@ -12,15 +12,17 @@ recs = json.loads(Path(sys.argv[1]).read_text()); g = json.loads(Path(sys.argv[2
 out = Path(sys.argv[3]); out.mkdir(parents=True, exist_ok=True)
 from prt.generators import two_factor_hmm, belief_coordinates   # dense generator-only curve (T = 16, MC)
 from prt.spectra import weighted_cov
-qs = np.linspace(0.15, 0.9, 16); curve = []
+qs = np.linspace(0.15, 0.95, 17); curve, curve_u = [], []
 for q in qs:
     h = two_factor_hmm(0.8, 0.5, 0.8, q, perm=[2, 0, 3, 1])
     m = belief_coordinates(h, h.filter(h.sample(100_000, 16, np.random.default_rng(0))))["m"]
     _, C = weighted_cov(m); curve.append(np.trace(C) ** 2 / np.sum(C * C))
+    u = np.arctanh(np.array([0.4, 0.8 * q]) * m); _, Cu = weighted_cov(u); curve_u.append(np.trace(Cu) ** 2 / np.sum(Cu * Cu))
 fig, ax = plt.subplots(1, 2, figsize=(11, 4.2))
 ax[0].plot(qs, curve, "k-", lw=2, label="locked prediction: isometric in m (generator only)")
+ax[0].plot(qs, curve_u, "k:", lw=1.2, label="alternative: isometric in u"); ax[0].axhline(2, c="grey", ls="--", lw=1, label="alternative: whitened (PR = 2)")
 for r in g["runs"].values():
-    held = r["q2"] in (0.35, 0.65)
+    held = r["q2"] in (0.2, 0.35, 0.65, 0.9)
     ax[0].scatter(r["q2"], r["pr_belief_m"], c="C3" if held else "C0", marker="o" if r["passing"] else "x", s=25, zorder=3)
     ax[1].scatter(r["q2"], r["pr_Ch"], c="C3" if held else "C0", marker="o" if r["passing"] else "x", s=25)
 ax[0].scatter([], [], c="C3", label="held-out reliability (per seed)"); ax[0].scatter([], [], c="C0", label="discovery reliability, new seeds")
