@@ -1,0 +1,4 @@
+q1=0.1 lr=0.05: SGD beta 0.0355 ± 0.0020 vs ODE 0.0328 (excess 8.2%)
+q1=0.1 lr=0.025: SGD beta 0.0339 ± 0.0018 vs ODE 0.0328 (excess 3.3%)
+q1=0.25 lr=0.05: SGD beta 0.2755 ± 0.0049 vs ODE 0.2653 (excess 3.8%)
+q1=0.25 lr=0.025: SGD beta 0.2669 ± 0.0093 vs ODE 0.2653 (excess 0.6%)
