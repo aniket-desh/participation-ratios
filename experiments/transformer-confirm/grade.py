@@ -37,7 +37,8 @@ for name in sorted({r["run"] for r in recs}):
     tail = [r["kl_final"] for r in rows if r["step"] >= 0.75 * LAST]
     floor4 = f["kl_lastk_final"]["4"]
     dlt = (s["m_token"]["r2_heldout"] - s["last_token"]["r2_heldout"]) - (s0["m_token"]["r2_heldout"] - s0["last_token"]["r2_heldout"])
-    pm, pu, pm0 = s["m_token"]["partialled"], s["u_token"]["partialled"], s0["m_token"]["partialled"]
+    pm, pu, pm0, pu0 = (s["m_token"]["partialled"], s["u_token"]["partialled"], s0["m_token"]["partialled"],
+                        s0["u_token"]["partialled"])
     obs = pm["pr_C_belief"]
     runs[name] = dict(q2=f["q2"], seed=f["seed"], kl_tailmean=float(np.mean(tail)), floor4=floor4, kl_single=f["kl_final"],
                       delta=dlt, passing=bool(np.mean(tail) < floor4 and dlt > 0.02),
@@ -49,6 +50,9 @@ for name in sorted({r["run"] for r in recs}):
                       in_band_step0=all(0.4 <= e <= 0.6 for e in pm0["G_norm_eigs"]),
                       toward_iso=abs(pm["G_norm_eigs"][0] - .5) < abs(pm0["G_norm_eigs"][0] - .5),
                       top_u=pu["G_norm_eigs"][0], m_closer=abs(pm["G_norm_eigs"][0] - .5) < abs(pu["G_norm_eigs"][0] - .5),
+                      m_closer_step0=abs(pm0["G_norm_eigs"][0] - .5) < abs(pu0["G_norm_eigs"][0] - .5),
+                      gap_um=abs(pu["G_norm_eigs"][0] - .5) - abs(pm["G_norm_eigs"][0] - .5),
+                      gap_um_step0=abs(pu0["G_norm_eigs"][0] - .5) - abs(pm0["G_norm_eigs"][0] - .5),
                       pr_Ch=s["C_h"]["pr"], pr_Ch_step0=s0["C_h"]["pr"])
 
 by = defaultdict(list)
@@ -119,6 +123,9 @@ else:
     pooled = np.mean([r["m_closer"] for q in ANISO for r in ok[q]])
     res["P3"] = "supported" if pooled >= 0.8 and min(fr.values()) >= 0.5 else ("not supported" if pooled < 0.5 or min(fr.values()) < 0.5 else "inconclusive")
     res["P3_frac_by_reliability"] = {q: float(v) for q, v in fr.items()}
+    # Untrained reference and whether training widens the u-minus-m distance from isotropy (reported, not graded).
+    res["P3_step0_reference_pooled_frac"] = float(np.mean([r["m_closer_step0"] for q in ANISO for r in ok[q]]))
+    res["P3_gap_widened_frac"] = float(np.mean([r["gap_um"] > r["gap_um_step0"] for q in ANISO for r in ok[q]]))
 if all(q in ok for q in ALL):
     pr_obs = {q: np.mean([r["pr_belief_m"] for r in ok[q]]) for q in ALL}
     pr_pred = {q: np.mean([r["pred"]["m_isometric"] for r in ok[q]]) for q in ALL}
