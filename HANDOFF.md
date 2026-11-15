@@ -16,7 +16,9 @@ Written for Aniket, who was away. This file is updated as the work goes; the new
 | Package 5 many-head continuum study | done; the continuum predicts finite networks with H^{-1/2} error, and attention learning drives the PR change | `experiments/heads-continuum/README.md` |
 | Package 5.14 interaction extension (dependent generators) | code and autograd test done; no runs yet | `prt/heads.py` |
 | Batch 3 architecture ablations (GPU) | reviewed twice, approved, supervisor `exp-transformer-ablations` | `experiments/transformer-ablations/` |
-| Batch 2 small-transformer discovery (GPU) | reviewed twice, approved, running under supervisor `exp-transformer-discovery` on an A40 ($0.59/hr, 3 h cap, $8 budget) | `experiments/transformer-discovery/` |
+| Batch 2 small-transformer discovery (GPU) | **done, inconclusive**: the token-partialled belief metric is much nearer isometric in m than in u (6/6 anisotropic runs), so H1u is not supported. H1 misses "supported" by one q2 = 0.8 seed (top eig 0.615), and depends on which KL bar you accept (see below). Cost $0.78 | `experiments/transformer-discovery/README.md`, `SUPERVISOR.md` |
+| Batch 4 confirmatory sweep with locked m-isometry prediction, held-out q2 ∈ {0.2, 0.35, 0.65, 0.9}, 5 seeds × 7 reliabilities (GPU) | reviewed twice, approved, supervisor `exp-transformer-confirm` | `experiments/transformer-confirm/` |
+| Batch 2b longer training (50k steps) to test whether the m-isometry persists (GPU) | approved (review skipped: a rerun of the Batch 2 design with a longer horizon), supervisor `exp-transformer-longrun` | `experiments/transformer-longrun/` |
 
 ## Decisions made in your absence (please review)
 
@@ -27,6 +29,11 @@ Written for Aniket, who was away. This file is updated as the work goes; the new
 - **I amended Batch 2's prediction-quality bar mid-run (before grading).** It now uses the tail mean of final-position KL over steps 15k–20k instead of the single last evaluation. The Batch 3 reviewer found that, in Batch 2's live logs, the single-evaluation KL at q2 = 0.8 fluctuates around the k = 4 floor (0.0006–0.0017 against 0.00132). The supervisor was asked to record this under Amendments and to report both verdicts.
 - **Batch 3 (architecture ablations) runs in parallel with Batch 2,** with its conditions fixed in advance at q2 ∈ {0.25, 0.8} rather than chosen after Batch 2. It has its own baseline arm and its own per-architecture lr pilots, so it is self-contained.
 - The rest are listed in each experiment's definition under "Questions asked before launch".
+
+## Decisions waiting for you
+
+- **Batch 2, H1's verdict depends on the KL bar.** Under the amended tail-mean bar, H1 (isometric in m) is inconclusive. Under the original single-final-evaluation bar, it is supported on eight runs. Both verdicts are in the Batch 2 write-up. The amendment arrived after training had finished but before grading. Its stated reason (single-evaluation noise around the floor) holds against the logs.
+- **Batch 4's PR test mostly restates the geometry test.** The belief-component PR is computed with the generator's own belief covariance, so it adds evidence only at reliabilities where alternatives (whitened, u-isometric) predict different values. The reviewer caught this, and Batch 4 now includes q2 = 0.2 and 0.9 and grades the alternatives with the same rule. Read its "discriminating" verdict, not the raw P2 pass.
 
 ## Things you should know
 
