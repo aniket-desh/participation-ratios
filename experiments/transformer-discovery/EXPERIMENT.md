@@ -1,7 +1,7 @@
 ---
 name: transformer-discovery
 title: Batch 2: small-transformer discovery on the binary two-factor generator
-status: draft
+status: approved
 gpu: NVIDIA A40,NVIDIA RTX A6000,NVIDIA GeForce RTX 5090,NVIDIA A100 80GB PCIe
 count: 1
 hours: 3
@@ -9,6 +9,7 @@ budget_usd: 8
 disk_gb: 40
 data:
 secrets:
+approved_utc: 2026-11-15T21:11:31Z
 ---
 
 # Batch 2: small-transformer discovery on the binary two-factor generator
@@ -82,13 +83,13 @@ bash $EXP_DIR/run.sh
 
 The run **succeeded** (produced an answer) if all nine main runs finish 20,000 steps with finite losses and every analysis file exists. **Prediction-quality bar:** a main run counts as having learned beyond a short window only if its final-position KL(Bayes‖model) is below the k = 4 floor `kl_lastk_final[4]`, the KL of the best predictor that sees only the last 4 tokens (recorded in each run's `config.json` together with k = 1–3). The reviewer measured the k = 3 floor at 8.5%, 7.7% and 1.8% of KL(Bayes‖uniform) for q2 = 0.25, 0.5 and 0.8, so a "10% of uniform" bar would admit short-window models. Runs that miss the k = 4 bar are reported, but H1/H1u/seed-consistency verdicts drawn from them are labelled "short-window model", and if fewer than two seeds per condition pass, those verdicts are inconclusive.
 
-Grading, over the main runs that pass the bar and the belief-content precondition:
-- **H1 supported** if, in every such run, partialled G_b (m) has both normalized eigenvalues in [0.4, 0.6] and e_PR(PR(E_b Σ_m E_bᵀ), m-isometric PR) < 0.1. **H1 not supported** if partialled G_b (m) has its top eigenvalue above 0.6 in all three seeds of at least one condition, or if the seed-mean top eigenvalue changes monotonically with q2 by more than 0.1 between q2 = 0.25 and q2 = 0.8. Otherwise **inconclusive**.
+Grading uses only the **passing runs**: main runs that pass both the k = 4 bar and the belief-content precondition. A condition with fewer than two passing seeds is inconclusive and contributes to neither "supported" nor "not supported". If no condition has two passing seeds, every hypothesis below is inconclusive.
+- **H1 supported** if all three conditions have at least two passing seeds, and in every passing run the partialled G_b (m) has both normalized eigenvalues in [0.4, 0.6] and e_PR(PR(E_b Σ_m E_bᵀ), m-isometric PR) < 0.1. **H1 not supported** if, in at least one condition with at least two passing seeds, every passing seed has its top eigenvalue above 0.6, or if factor 1's share G_b[0,0]/tr G_b (seed mean over passing runs) differs by more than 0.1 between q2 = 0.25 and q2 = 0.8. Otherwise **inconclusive**. (The reviewer notes that isotropy in u would look, in m, like top eigenvalues of about 0.8, 0.5 and 0.72 across q2, so the trend rule uses factor 1's share, which keeps track of which factor dominates.)
 - **H1u** graded by the same rules with b = u and `pr_u_isometric`.
 - **m vs u**: "u favored" if u is closer in at least 5 of 6 anisotropic runs, "m favored" if m is closer in at least 5 of 6, otherwise undecided.
 - **Seed consistency**: CV(PR(C_h)) < 5% in each condition, or not.
 - **Measurement validity**: PR(C_h) at n_eval 65,536 within 1% of the 262,144 value at the final checkpoint for every main run. Otherwise the PR claims are marked as sample-limited.
-- **Shuffled control passes** if R²(m_token) − R²(last_token) < 0.01 at step 20,000. Belief coordinates of the unshuffled filter carry no predictive information there, so a larger value would point to a pipeline artifact.
+- **Shuffled control:** report Δ_shuf = R²(m_token) − R²(last_token) at step 20,000 minus step 0. Belief coordinates of the unshuffled filter carry no predictive information on IID tokens, but a trained model can still keep history averages in directions the unembedding ignores, and those correlate with m (residual memory, plan §4.3). So Δ_shuf ≥ 0.01 means memory or a pipeline artifact, not necessarily an artifact. As a secondary reading, the main runs' belief-content Δ is also compared against Δ_shuf, and a main run whose Δ does not exceed Δ_shuf is flagged as possibly memory rather than predictive belief content.
 - **Permutation control passes** if each permuted run's partialled G_b top eigenvalue (m and u) and its PR(C_h) lie within the corresponding main condition's three-seed range widened by 0.05 (PR by 5%).
 
 The run **failed** if training diverges for every pilot lr, or if analysis files are missing for the main runs.
@@ -109,7 +110,7 @@ CPU smoke test of the whole driver on the coordinator (40 steps, n_eval 2,048) t
 
 ## Questions asked before launch
 
-None asked: the user was away and gave a standing go-ahead for the experiments in the plan within $150 total and $25 per worker. Decisions made in their absence: the lr selection rule above, the choice of controls (shuffled, one alternative permutation on two conditions), adding token-identity coordinate sets as a declared control, and running Batch 2 while Batch 1 runs on the coordinator CPU (Gate A/B exact checks already pass in `tests/`).
+None asked: the user was away and gave a standing go-ahead (this definition is approved under it) for the experiments in the plan within $150 total and $25 per worker. Decisions made in their absence: the lr selection rule above, the choice of controls (shuffled, one alternative permutation on two conditions), adding token-identity coordinate sets as a declared control, and running Batch 2 while Batch 1 runs on the coordinator CPU (Gate A/B exact checks already pass in `tests/`).
 
 ## Review
 
@@ -122,6 +123,8 @@ First review (experiment-reviewer, on the version with H1u added):
 - P2, the controls had no stated outcome. **Fixed:** thresholds added for the shuffled and permutation controls.
 - P2, the analysis order contradicted the stated priority. **Fixed:** `run.sh` analyzes main runs first.
 - P2, uncommitted analysis changes. **Fixed:** everything is committed before launch.
+
+Re-check: all first-round P1s were confirmed fixed, and the partialled block was verified on synthetic data, recovering AᵀA eigenvalues to 4 decimals with token embeddings 5× larger. One new P1: excluding a seed made rejection impossible, and an empty pool counted as supported. **Fixed:** grading now pools over passing seeds, needs at least two per condition, and treats conditions below that as inconclusive. P2, the trend rule ignored which factor dominates. **Fixed:** it now uses factor 1's share (saved as `factor1_share`). P2, the shuffled-control interpretation was too strong. **Fixed:** it is now read as "memory or artifact", with a secondary comparison of the main runs' Δ against it.
 
 ## Amendments
 

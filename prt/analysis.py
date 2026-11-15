@@ -103,6 +103,7 @@ def partialled_belief_block(H, B, k):
     C = Eb @ Sb @ Eb.T
     tr = np.trace(Gb)
     return dict(G_norm_eigs=(np.linalg.eigvalsh(Gb)[::-1] / tr).tolist(), trace_G=float(tr),
+                factor1_share=float(Gb[0, 0] / tr),           # G_b[0,0] / tr G_b: which factor dominates
                 pr_C_belief=float(np.trace(C) ** 2 / np.sum(C * C)))
 
 
