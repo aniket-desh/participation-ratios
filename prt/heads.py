@@ -186,3 +186,92 @@ def onset(theta0, w, pop):
     A0, B20 = np.trace(S0), np.sum(S0 * S0)
     prdd = 2 * A0 * np.trace(S2) / B20 - 2 * A0**2 * np.sum(S0 * S2) / B20**2
     return dict(A=A, B=Bu, Kdd=Kdd, S0=S0, S2=S2, pr0=float(A0**2 / B20), prdd0=float(prdd))
+
+
+# ---------------------------------------------------------------------------
+# Interaction extension for dependent generators (derivations §5.14)
+# ---------------------------------------------------------------------------
+# theta gains a sixth coordinate b (index B12); chi = psi_1 psi_2 and f12 = sum_n w_n b_n chi_n.
+# Logits L_y = y1 f1 + y2 f2 + y1 y2 f12, Z = 2 e^{f12} cosh(f1+f2) + 2 e^{-f12} cosh(f1-f2),
+# conditional loss log Z - mu1 f1 - mu2 f2 - mu12 f12 with mu12 = E[Y1 Y2 | c] from full joint filtering.
+B12 = 5
+
+
+def population_from_hmm(hmm, T: int) -> tuple[Population, np.ndarray]:
+    """Exact population of a (possibly coupled) two-factor HMM: returns Population(xs, p, mu) and mu12 (M,).
+
+    Next-token moments come from the joint posterior: mu_j = E[Y_j | c], mu12 = E[Y1 Y2 | c].
+    """
+    from .generators import token_pairs
+    toks, p, b = hmm.enumerate(T)
+    pairs = token_pairs(hmm).astype(float)        # (V, 2) signs per token label
+    P = hmm.next_token_probs(b)                    # (M, V)
+    mu = P @ pairs
+    mu12 = P @ (pairs[:, 0] * pairs[:, 1])
+    return Population(pairs[toks], p, mu), mu12
+
+
+def logits_int(theta, w, psi):
+    f = logits(theta, w, psi)
+    f12 = np.einsum("q,q,qm->m", w, theta[:, B12], psi[..., 0] * psi[..., 1])
+    return f, f12
+
+
+def _logZ_and_grads(f, f12):
+    """log Z and its gradient w.r.t. (f1, f2, f12), computed stably via log-sum-exp over the four tokens."""
+    y = np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]], float)
+    L = f @ y.T + f12[:, None] * (y[:, 0] * y[:, 1])[None]   # (M, 4)
+    Lmax = L.max(1, keepdims=True)
+    e = np.exp(L - Lmax)
+    Z = e.sum(1, keepdims=True)
+    q = e / Z                                                # model distribution over tokens
+    return (Lmax + np.log(Z))[:, 0], q @ y, q @ (y[:, 0] * y[:, 1])
+
+
+def loss_int(theta, w, pop, mu12):
+    psi, _ = features(theta, pop)
+    f, f12 = logits_int(theta, w, psi)
+    logZ, _, _ = _logZ_and_grads(f, f12)
+    return float(pop.p @ (logZ - np.sum(pop.mu * f, 1) - mu12 * f12))
+
+
+def velocity_int(theta, w, pop, mu12, mask=None):
+    """Mean-field velocity with the interaction logit: (Q, 6)."""
+    psi, dpsi = features(theta, pop)
+    f, f12 = logits_int(theta, w, psi)
+    _, Ey, Ey12 = _logZ_and_grads(f, f12)
+    e, e12 = Ey - pop.mu, Ey12 - mu12
+    pe, pe12 = pop.p[:, None] * e, pop.p * e12
+    chi = psi[..., 0] * psi[..., 1]
+    dchi = dpsi[..., 0, :] * psi[..., 1, None] + psi[..., 0, None] * dpsi[..., 1, :]   # (Q,M,3)
+    v = np.empty_like(theta)
+    v[:, :2] = -np.einsum("mj,qmj->qj", pe, psi)
+    v[:, 2:5] = -(np.einsum("mj,qj,qmju->qu", pe, theta[:, :2], dpsi) + np.einsum("m,q,qmu->qu", pe12, theta[:, B12], dchi))
+    v[:, B12] = -np.einsum("m,qm->q", pe12, chi)
+    return v if mask is None else v * mask
+
+
+def integrate_int(theta0, w, pop, mu12, dt, steps, record_every=1):
+    """RK4 for the interaction model. theta0 is (Q, 6) with b(0) = 0 by default."""
+    th = theta0.copy()
+    rec = {"tau": [], "loss": [], "S": [], "theta_mean": []}
+
+    def log(n):
+        rec["tau"].append(n * dt); rec["loss"].append(loss_int(th, w, pop, mu12))
+        rec["S"].append(kernel(th, w, pop)[1]); rec["theta_mean"].append(w @ th)
+
+    log(0)
+    for n in range(1, steps + 1):
+        k1 = velocity_int(th, w, pop, mu12)
+        k2 = velocity_int(th + 0.5 * dt * k1, w, pop, mu12)
+        k3 = velocity_int(th + 0.5 * dt * k2, w, pop, mu12)
+        k4 = velocity_int(th + dt * k3, w, pop, mu12)
+        th = th + dt / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+        if n % record_every == 0:
+            log(n)
+    return th, {k: np.array(v) for k, v in rec.items()}
+
+
+def with_interaction(theta):
+    """Append a zero interaction coordinate b to (Q, 5) parameters."""
+    return np.hstack([theta, np.zeros((len(theta), 1))])
