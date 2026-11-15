@@ -1,7 +1,7 @@
 ---
 name: transformer-ablations
 title: Batch 3: attention-only and pre-LayerNorm ablations of the small transformer
-status: draft
+status: approved
 gpu: NVIDIA A40,NVIDIA RTX A6000,NVIDIA GeForce RTX 5090,NVIDIA A100 80GB PCIe
 count: 1
 hours: 4
@@ -9,6 +9,7 @@ budget_usd: 10
 disk_gb: 40
 data:
 secrets:
+approved_utc: 2026-11-15T21:38:28Z
 ---
 
 # Batch 3: attention-only and pre-LayerNorm ablations of the small transformer
@@ -85,7 +86,7 @@ The run **succeeded** if all 18 main runs finish with finite losses and have ana
 **Matched prediction quality.** For every comparison, report the ratio of the two cells' seed-mean tail-mean excess KL. If the ratio exceeds 2, any difference found in that comparison is labelled "confounded with prediction quality" instead of "supported", because a worse predictor may simply encode differently.
 
 **Verdict rule**, applied separately to (i) the partialled belief metric (m and u factor-1 share; the larger |Δ| of the two decides) and (ii) PR(C_h), at step 20,000, using seed means over passing runs. Δ is the difference between the two cells, and SD is the larger of the two cells' seed SDs:
-- **Supported** if, in at least one condition, |Δ| exceeds its threshold (0.1 for factor-1 share, 5% relative for PR(C_h)), |Δ| > 2·SD, |Δ| is larger than the same difference at step 0, and the excess-KL ratio is at most 2.
+- **Supported** if, in at least one condition, |Δ| exceeds its threshold (0.1 for factor-1 share, 5% relative for PR(C_h)), |Δ| > 2·SD, |Δ| is larger than the same difference at step 0 (where the step-0 value is undefined under the R² gate, as it is for the belief metric at initialization, this condition is met), and the excess-KL ratio is at most 2.
 - **Not supported** if, in both conditions, |Δ| is below its threshold and 2·SD is also below the threshold, so a shift of the threshold size would have been detectable.
 - **Inconclusive** otherwise, including whenever seed noise is too large to rule out a threshold-sized shift.
 - For A1 and A3, same-seed runs share their initial embedding and attention weights (A1) or are the same model (A3). The per-seed paired differences are reported alongside the unpaired rule as a tighter descriptive check. Verdicts use the unpaired rule.
@@ -108,7 +109,7 @@ The CPU smoke test of the whole driver (20 steps, n_eval 2,048, 27 runs) took 5.
 
 ## Questions asked before launch
 
-None asked: the user was away and gave a standing go-ahead for the plan's experiments within $25 per worker and $150 total, which covers this definition. Decisions made in their absence: fixing the conditions at q2 ∈ {0.25, 0.8} before Batch 2 finished (reason above), selecting lr per architecture instead of reusing Batch 2's, including a baseline arm so the batch is self-contained, and grading architecture dependence descriptively because no constrained-update prediction exists yet.
+None asked: the user was away and gave a standing go-ahead for the plan's experiments within $25 per worker and $150 total, which covers this definition (approved under it). Decisions made in their absence: fixing the conditions at q2 ∈ {0.25, 0.8} before Batch 2 finished (reason above), selecting lr per architecture instead of reusing Batch 2's, including a baseline arm so the batch is self-contained, and grading architecture dependence descriptively because no constrained-update prediction exists yet.
 
 ## Review
 
@@ -119,6 +120,7 @@ First review (experiment-reviewer): no P0.
 - P2, one crashing pilot would stop the driver. **Fixed:** `|| true` on the training stages, and `select_lr.py` writes `lr: null` when no pilot is stable or finished, so that arm is skipped.
 - P2, lr was confounded with architecture. **Fixed:** pilots are analyzed at steps 0 and 20,000, and the within-pilot lr effect is reported where selected lrs differ.
 - P2, step-0 differences were unused. **Fixed:** a supported Δ must exceed its step-0 value, and both are reported.
+Re-check: all P1s and P2s confirmed fixed; one P2, the step-0 condition was undefined for the gated belief metric. **Fixed** with an explicit clause.
 - Notes adopted: paired per-seed differences are reported, and the write-up must state that `--norm pre` has no final LayerNorm. Reviewer timing from Batch 2's live worker (220–240 s per 20k-step run with 4 concurrent; about 13.5 s analysis per checkpoint) puts this batch at about 1.5–2 h, inside the 4 h cap.
 
 ## Amendments
