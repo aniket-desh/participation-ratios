@@ -8,11 +8,14 @@ Written for Aniket, who was away. This file is updated as the work goes; the new
 | --- | --- | --- |
 | Docs organized | done | `docs/`, `README.md` |
 | Onboarding (`orch.toml`, reusing the coordinator and volumes) | done | `orch.toml` |
-| Codebase `prt/` with exact-reference tests (25 passing) | done | `prt/`, `tests/` |
+| Codebase `prt/` with exact-reference tests (26 passing) | done | `prt/`, `tests/` |
+| Fact-check of the four CPU write-ups | done; 14 of about 128 claims corrected, all headlines held | the write-ups' "How it was checked" |
 | Batch 0 / Gate A (generator, filter, covariance pipeline, imposed filter, weak signal, coupled generator) | done, passes | `experiments/batch0-generator-validation/README.md` |
 | Batch 1 / Gate B (balanced linear learning) | done, passes | `experiments/batch1-balanced-linear/README.md` |
 | Stage C learned positional filter (exact ODE vs SGD) | done; the ODE predicts SGD's β and PR | `experiments/stagec-learned-filter/README.md` |
-| Package 5 many-head continuum study | running on coordinator CPU | `experiments/heads-continuum/` |
+| Package 5 many-head continuum study | done; the continuum predicts finite networks with H^{-1/2} error, and attention learning drives the PR change | `experiments/heads-continuum/README.md` |
+| Package 5.14 interaction extension (dependent generators) | code and autograd test done; no runs yet | `prt/heads.py` |
+| Batch 3 architecture ablations (GPU) | reviewed twice, approved, supervisor `exp-transformer-ablations` | `experiments/transformer-ablations/` |
 | Batch 2 small-transformer discovery (GPU) | reviewed twice, approved, running under supervisor `exp-transformer-discovery` on an A40 ($0.59/hr, 3 h cap, $8 budget) | `experiments/transformer-discovery/` |
 
 ## Decisions made in your absence (please review)
