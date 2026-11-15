@@ -1,7 +1,7 @@
 ---
 name: transformer-ablations
 title: Batch 3: attention-only and pre-LayerNorm ablations of the small transformer
-status: approved
+status: done
 gpu: NVIDIA A40,NVIDIA RTX A6000,NVIDIA GeForce RTX 5090,NVIDIA A100 80GB PCIe
 count: 1
 hours: 4
@@ -10,6 +10,9 @@ disk_gb: 40
 data:
 secrets:
 approved_utc: 2026-11-15T21:38:28Z
+result: supported
+finished_utc: 2026-11-15T23:20:37Z
+writeup: experiments/transformer-ablations/README.md
 ---
 
 # Batch 3: attention-only and pre-LayerNorm ablations of the small transformer
@@ -129,4 +132,11 @@ None.
 
 ## Outcome
 
-Not run yet.
+**Supported**: the geometry is architecture-dependent, and the MLP stage is where it changes. Write-up: [README.md](README.md).
+- **Run succeeded:** all 18 main runs finished with finite losses and analysis files; all 9 pilots were stable, and every architecture selected lr = 1e-3.
+- **Prediction-quality bar:** passed by 3/3 seeds in every cell except attention-only at q2 = 0.8 (0/3; tail-mean KL 0.0025–0.0027 against a 4-token floor of 0.00132).
+- **A1, attention-only vs baseline:** belief metric inconclusive (cell missing at q2 = 0.8); PR(C_h) supported (+0.66 at q2 = 0.25, excess-KL ratio 1.995, at the cap of 2).
+- **A2, pre-LN vs baseline:** belief metric not supported (2·SD 0.0995 against 0.1); PR(C_h) supported at q2 = 0.8 only (−0.150, −6%). Within pre-LN, `ln2` vs `resid_mid`: belief not supported, PR inconclusive.
+- **A3, baseline `resid_post` vs `resid_mid`:** belief metric supported at q2 = 0.8 (+0.129, 2·SD 0.100); PR(C_h) supported in both conditions (−1.74, −0.72).
+- Five verdicts are near their limits; seeds 3–5 (about 1.5 h, under $1) would re-test them.
+- **Cost:** one A40, 1 h 34 min, about $0.92 of the $10 budget, well inside the 4 h cap.
