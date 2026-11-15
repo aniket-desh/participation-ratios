@@ -8,7 +8,7 @@ There are three progressively stronger targets. First, calculate the covariance 
 
 **The proposed contribution is a predictive connection between generator statistics and learned covariance, rather than the observation that HMM-trained transformers have low-dimensional activations.** Simplex already provides close precedents for belief geometry, constrained attention updates, and factored activation spectra [1–3]. This document contains exact identities and proposed calculations, not new experimental results or a completed transformer DMFT solution.
 
-The companion [experiment plan](transformer_pr_experiments.md) turns these calculations into staged tests. The models throughout are small sequence transformers and controlled learning baselines.
+The companion [experiment plan](experiment_plan.md) turns these calculations into staged tests. The models throughout are small sequence transformers and controlled learning baselines.
 
 ## 1. Scientific contract and levels of ambition
 

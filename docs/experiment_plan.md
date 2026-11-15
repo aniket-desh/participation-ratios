@@ -2,7 +2,7 @@
 
 *A staged test of whether known predictive-state statistics, together with a specified learning theory, predict the covariance spectrum of trained transformer activations.*
 
-Prepared 15 November 2026. This is a research plan. All results below are hypotheses, analytical benchmarks, or proposed acceptance criteria; no training results are being reported. The companion document is [the theory roadmap](transformer_pr_theory.md). The scope is small transformers and controlled sequence generators.
+Prepared 15 November 2026. This is a research plan. All results below are hypotheses, analytical benchmarks, or proposed acceptance criteria; no training results are being reported. The companion document is [the theory roadmap](theory_roadmap.md). The scope is small transformers and controlled sequence generators.
 
 ## 1. Scientific question and the contribution to aim for
 
