@@ -28,6 +28,8 @@ The learned decay is generator-dependent and far from the weak-signal value −l
 
 ## How it was checked
 
+- **Independent fact-check of this write-up** against `results.json`: all headline numbers held. It replaced population SDs with sample SDs, corrected the factor-2 readout-weight bound (±0.018, not ±0.006), fixed two rounded table entries, and pointed out the evaluation-sample offset at $q_1$ = 0.5.
+
 - Finite-difference checks of $\partial_\beta\alpha$ and $\partial_\beta^2\alpha$, a monotone loss decrease along the ODE, and agreement of the recorded covariance with a direct recomputation are all in `tests/test_attention_filter.py`.
 - The ODE and SGD start from the same point and use the same time convention, τ = learning rate × steps.
 

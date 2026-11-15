@@ -20,6 +20,8 @@ At the Batch 2 context length T = 16 the same quantities come from 2,000,000 Mon
 
 ## Checks and what they would have caught
 
+- **Independent fact-check of this write-up** against `results.json`: all headline numbers held. It corrected the moment count (three distinct moments, not four), scoped the sampled-moment agreement to $q_2=0.25$, and removed an unsupported comparison with Batch 2, whose results did not exist yet.
+
 - **Two filters.** The matrix HMM filter and the scalar magnetization recursion (derivations §1.3) agree to 0 at printed precision (max difference below $10^{-15}$), and the scalar filter's product of predictive probabilities reproduces every context probability. This would catch a wrong emission or transition convention, or a token-label mix-up.
 - **Normalization and tower property.** $\sum_cp_c-1$ and $\max|\mathbb E[b]-\pi|$ are 0 at printed precision for every $q_2$.
 - **Walsh spectrum.** The direct 4-state posterior covariance has eigenvalues $v_1/4$, $v_2/4$, $v_1v_2/4$ and 0 to round-off, confirming derivations §1.5.

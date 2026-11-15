@@ -26,6 +26,8 @@ With teacher diag(1, 1) every balanced or small initialization ends at PR 2.0000
 
 ## How it was checked
 
+- **Independent fact-check of this write-up** against `results.json` and `run.py`: all headline numbers held. It corrected the table heading (the aligned row is one initialization at τ = 40), softened "equals" to "matches to within 0.02%", fixed a rounded range, and removed an unmeasured claim about null-space directions.
+
 - The test suite (`tests/test_linear.py`) checks the same trajectory with RK4 to $10^{-8}$, conservation of exact balance to $10^{-12}$, first-order Euler convergence, the $(s-\lambda)_+$ endpoint, and the uniform rescaling of the hidden spectrum by $\sqrt{\eta_E/\eta_D}$ under unequal layer rates, which leaves PR unchanged.
 - Whitening is verified inside the script with an assertion.
 

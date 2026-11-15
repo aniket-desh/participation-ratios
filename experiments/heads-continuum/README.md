@@ -26,6 +26,8 @@ The model is that of derivations §5.1. Each head has $(a_1,a_2,\beta,\kappa,g)$
 
 ## How it was checked
 
+- **Independent fact-check of this write-up** against `results/*.json`: all headline numbers held. It added seed-bootstrap intervals for the H exponents, corrected the weak-signal ratios (16× is reached only as ε shrinks), and removed an untested attribution of the sweep generators' PR phases to readout and attention learning.
+
 - Analytic head gradients equal −H times the autograd gradient of an independent torch implementation of the same model, to $10^{-12}$ (`tests/test_heads.py`). So do the §5.14 interaction-extension gradients.
 - The loss decreases monotonically along the flow, as §5.6 requires.
 - The onset coefficient agrees with symmetric short-time integration ±τ, with the second-order error ratio expected from differencing.
