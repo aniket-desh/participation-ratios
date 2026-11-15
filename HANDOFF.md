@@ -9,10 +9,11 @@ Written for Aniket, who was away. This file is updated as the work goes; the new
 | Docs organized | done | `docs/`, `README.md` |
 | Onboarding (`orch.toml`, reusing the coordinator and volumes) | done | `orch.toml` |
 | Codebase `prt/` with exact-reference tests (25 passing) | done | `prt/`, `tests/` |
-| Batch 0 / Gate A (generator, filter, covariance pipeline, imposed filter, weak signal, coupled generator) | done, passes | `experiments/batch0-generator-validation/` |
-| Batch 1 / Gate B (balanced linear learning) | done, passes | `experiments/batch1-balanced-linear/` |
+| Batch 0 / Gate A (generator, filter, covariance pipeline, imposed filter, weak signal, coupled generator) | done, passes | `experiments/batch0-generator-validation/README.md` |
+| Batch 1 / Gate B (balanced linear learning) | done, passes | `experiments/batch1-balanced-linear/README.md` |
+| Stage C learned positional filter (exact ODE vs SGD) | done; the ODE predicts SGD's β and PR | `experiments/stagec-learned-filter/README.md` |
 | Package 5 many-head continuum study | running on coordinator CPU | `experiments/heads-continuum/` |
-| Batch 2 small-transformer discovery (GPU) | in review | `experiments/transformer-discovery/` |
+| Batch 2 small-transformer discovery (GPU) | reviewed twice, approved, running under supervisor `exp-transformer-discovery` on an A40 ($0.59/hr, 3 h cap, $8 budget) | `experiments/transformer-discovery/` |
 
 ## Decisions made in your absence (please review)
 
