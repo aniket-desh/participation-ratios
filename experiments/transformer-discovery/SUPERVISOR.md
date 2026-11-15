@@ -44,5 +44,5 @@ One A40 for 1 h 19 min, about $0.78, against the $8 budget and 3 h cap. The fact
 
 - **Decide which prediction-quality rule you accept for H1.** With amendment A1 (as graded) H1 is inconclusive. With the original rule it is supported on eight runs, and the q2 = 0.8 condition then rests on two seeds. Nothing else in the result depends on this choice.
 - **Consider a short follow-on before treating "isometric in m" as a law.** It would cover more seeds at q2 = 0.8 and longer training. PR(C_h) fell between 10k and 20k in every main run, and the q2 = 0.8 metric is still moving. Training the nine main runs to 50k steps is about 30 min on one A40 plus analysis, roughly $0.5–1. The definition doesn't allow extending inside this experiment.
-- **Update the experiment log.** I left `EXPERIMENTS.md` to the planning session as instructed. It is currently untracked in git. orch wrote this run's entry, but the result field there may still say "not recorded yet".
+- **Commit the experiment log when convenient.** I left `EXPERIMENTS.md` to the planning session as instructed. orch has already written this run's entry with "result: inconclusive", but the file is untracked in git.
 - **Nothing was pushed,** and no worker of this experiment is left running.
