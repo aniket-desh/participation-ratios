@@ -25,7 +25,7 @@ import torch.nn.functional as F
 from .generators import shuffled_control, two_factor_hmm
 from .transformer import ModelConfig, Transformer
 
-SCHEDULE = [0, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000]
+SCHEDULE = [0, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 30000, 40000, 50000, 75000, 100000]
 
 
 def make_hmm(cfg: dict):
