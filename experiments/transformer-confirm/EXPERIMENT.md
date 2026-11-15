@@ -1,7 +1,7 @@
 ---
 name: transformer-confirm
 title: Batch 4: locked prediction of the belief-component spectrum on held-out reliabilities
-status: draft
+status: approved
 gpu: NVIDIA A40,NVIDIA RTX A6000,NVIDIA GeForce RTX 5090,NVIDIA A100 80GB PCIe
 count: 1
 hours: 3
@@ -9,6 +9,7 @@ budget_usd: 8
 disk_gb: 40
 data:
 secrets:
+approved_utc: 2026-11-15T22:48:14Z
 ---
 
 # Batch 4: locked prediction of the belief-component spectrum on held-out reliabilities
@@ -17,11 +18,11 @@ secrets:
 
 ## Question
 
-Does a prediction fixed before training, using only the generator, give the geometry and spectrum of the belief component of a trained transformer's final residual at generator conditions never used to form it? The locked rule, found in Batch 2 (`experiments/transformer-discovery/grade.json`: 6 of 6 anisotropic runs closer to isotropic in m than in u, 8 of 9 in the isotropy band), is that the token-partialled belief encoding is **isometric in the probability coordinates m**. The belief component's PR then follows the generator-only curve (v1+v2)²/(v1²+v2²), which is nonconstant in q2: 1.446, 1.620, 1.882, 2.000, 1.948, 1.858 and 1.791 at q2 = 0.2, 0.25, 0.35, 0.5, 0.65, 0.8 and 0.9 (T = 16).
+Does a prediction fixed before training, using only the generator, give the geometry and spectrum of the belief component of a trained transformer's final residual at generator conditions never used to form it? The locked rule, found in Batch 2 (`experiments/transformer-discovery/grade.json`: 6 of 6 anisotropic runs closer to isotropic in m than in u, 8 of 9 in the isotropy band), is that the token-partialled belief encoding is **isometric in the probability coordinates m**. The belief component's PR then follows the generator-only curve (v1+v2)²/(v1²+v2²), which is nonconstant in q2: 1.443, 1.620, 1.882, 2.000, 1.948, 1.858 and 1.791 at q2 = 0.2, 0.25, 0.35, 0.5, 0.65, 0.8 and 0.9 (T = 16).
 
 In the plan's §2.3 terms this is a **calibrated prediction**: the rule comes from discovery, is locked here, and is tested on held-out reliabilities and new seeds, with nothing fitted per condition.
 
-**What the PR test does and does not add.** The observed belief-component PR is computed as PR(E_b Σ_b E_bᵀ), with Σ_b the generator's own belief covariance on the eval contexts, and the prediction uses the same Σ_b. So the PR comparison measures nothing beyond the shape and orientation of the learned metric G_b. Its dependence on q2 is supplied by the generator, not learned. The PR test is informative only where competing metric hypotheses predict different PRs. At q2 = 0.35 and 0.65 almost any near-isotropic G passes, including a whitened encoding (constant PR 2) (reviewer check). This definition therefore adds held-out reliabilities 0.2 and 0.9, where the m-isometric curve (1.446, 1.791) is far from the whitened value 2 and from the u-isometric curve (1.070, 1.209). It also grades the alternatives by the same rule and counts a PR pass as discriminating only where they fail. The full covariance PR(C_h), which also contains the final token's embedding, is not predicted and is reported descriptively.
+**What the PR test does and does not add.** The observed belief-component PR is computed as PR(E_b Σ_b E_bᵀ), with Σ_b the generator's own belief covariance on the eval contexts, and the prediction uses the same Σ_b. So the PR comparison measures nothing beyond the shape and orientation of the learned metric G_b. Its dependence on q2 is supplied by the generator, not learned. The PR test is informative only where competing metric hypotheses predict different PRs. At q2 = 0.35 and 0.65 almost any near-isotropic G passes, including a whitened encoding (constant PR 2) (reviewer check). This definition therefore adds held-out reliabilities 0.2 and 0.9, where the m-isometric curve (1.443, 1.791) is far from the whitened value 2 and from the u-isometric curve (1.070, 1.209). It also grades the alternatives by the same rule and counts a PR pass as discriminating only where they fail. The full covariance PR(C_h), which also contains the final token's embedding, is not predicted and is reported descriptively.
 
 ## Hypothesis
 
@@ -66,7 +67,7 @@ bash $EXP_DIR/run.sh
 
 ## Controls
 
-- Step-0 analysis of every run. Belief content must grow beyond its initial value (Δ > 0.02), so the untrained near-isometry of random embeddings cannot pass P1.
+- Step-0 analysis of every run: the belief-content gate Δ > 0.02 requires training to add belief information beyond token identity, and P1-learned requires training to move the geometry toward isotropy (the Δ gate alone would not exclude the near-isometry of random maps).
 - The token-identity control: the belief block is partialled against the final token's one-hot.
 - Short-window floors (k = 1–4) as the prediction-quality bar.
 - Alternatives graded by the same P2 rule: whitened (PR 2), u-isometric (T = 16: 1.070, 1.162, 1.517, 2.000, 1.677, 1.340 and 1.209 at the seven reliabilities), and each run's own step-0 PR.
@@ -102,7 +103,7 @@ Batch 2's worker took 219–240 s per 20k-step run with 4 concurrent and about 1
 None asked: the user was away and gave a standing go-ahead for the plan's experiments within $25 per worker and $150 total, which covers this definition (approved under it). Decisions made in their absence:
 - Locking the m-isometry rule from Batch 2 as a calibrated prediction.
 - Using Batch 2's selected lr without re-piloting.
-- New seeds 10–14 at all five reliabilities.
+- New seeds 10–14 at all seven reliabilities.
 - Pooled majority rules instead of "every run", because of Batch 2's one outlier seed.
 - Adding q2 = 0.2 and 0.9 as held-out reliabilities beyond the two reserved in Batch 0, so the PR test can discriminate (reviewer P0).
 
@@ -114,6 +115,8 @@ First review (experiment-reviewer):
 - P1, `grade.py` crashed on unfinished runs. **Fixed:** unfinished runs are counted, `run_failed` is computed in the script, and both were tested on a partial result file.
 - P1, about a 40% risk of "inconclusive" under per-reliability rules. **Fixed:** pooled rules, with the risk stated.
 - P2, the T label on the u curve was wrong. **Fixed:** T = 16 values, recomputed.
+
+Re-check: all four earlier findings confirmed fixed and no new P0 (including the P3 step-0 addition). The reviewer notes that over the held-out scope the whitened alternative's failure rests on q2 = 0.2 alone. Three stale lines were fixed (the Controls wording, the seed count, the q2 = 0.2 value).
 
 ## Amendments
 
