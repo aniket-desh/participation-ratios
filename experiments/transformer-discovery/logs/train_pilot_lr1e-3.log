@@ -1,0 +1,1 @@
+{"out": "runs/transformer-discovery/pilot_lr1e-3", "final": {"ce": 1.3194434541574398, "kl": 0.0005903745246761459, "kl_final": 0.00047024950828538893, "ce_final": 1.319045608936563}, "seconds": 211.9637532234192}

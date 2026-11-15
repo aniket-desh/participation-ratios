@@ -1,0 +1,1 @@
+{"out": "runs/transformer-discovery/ctrl_shuffled_s0", "final": {"ce": 1.3862936737301021, "kl": 2.9340625976775776e-05, "kl_final": 1.1550706263671162e-05, "ce_final": 1.3863309016114145}, "seconds": 214.77403354644775}

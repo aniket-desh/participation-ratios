@@ -1,0 +1,1 @@
+{"out": "runs/transformer-discovery/ctrl_perm777_q0.8_s0", "final": {"ce": 1.1944137427706276, "kl": 0.000759370975757853, "kl_final": 0.0010426871582219074, "ce_final": 1.1833602509615853}, "seconds": 210.83703899383545}
