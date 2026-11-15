@@ -17,7 +17,7 @@ declare -A FLAGS=([base]="" [nomlp]="--no_mlp" [preln]="--norm pre")
 
 for arch in base nomlp preln; do
   for lr in 1e-4 3e-4 1e-3; do echo "${arch}_pilot_lr${lr} --q2 0.5 --seed 100 --lr $lr ${FLAGS[$arch]}"; done
-done | sed 's/[[:space:]]*$//' | xargs -P "$PAR" -L1 bash -c 'train "$@"' _
+done | sed 's/[[:space:]]*$//' | xargs -P "$PAR" -L1 bash -c 'train "$@"' _ || true   # a diverged pilot is judged by select_lr.py
 
 for arch in base nomlp preln; do
   mkdir -p "$R/_sel_$arch"; for d in "$R/${arch}_pilot_lr"*; do ln -sfn "$(realpath "$d")" "$R/_sel_$arch/pilot_lr${d##*_lr}"; done
@@ -26,13 +26,20 @@ done
 {
   for arch in base nomlp preln; do
     LR=$(python3 -c "import json;print(json.load(open('$EXP_DIR/lr_$arch.json'))['lr'])")
+    [ "$LR" = "None" ] && { echo "arch $arch: no stable pilot, arm skipped" >&2; continue; }
     for q2 in 0.25 0.8; do for s in 0 1 2; do echo "${arch}_q${q2}_s${s} --q2 $q2 --seed $s --lr $LR ${FLAGS[$arch]}"; done; done
   done
-} | sed 's/[[:space:]]*$//' | xargs -P "$PAR" -L1 bash -c 'train "$@"' _
+} | sed 's/[[:space:]]*$//' | xargs -P "$PAR" -L1 bash -c 'train "$@"' _ || true   # analyze whatever finished
 
 for d in "$R"/base_q*/ "$R"/nomlp_q*/ "$R"/preln_q*/; do
   [ -d "$d" ] || continue; n=$(basename "$d"); [ -f "$d/analysis/step_$(printf %06d "$STEPS").json" ] && continue
   uv run python -m prt.analysis "$d" --n_eval "$NEVAL" > "$EXP_DIR/logs/analysis_$n.log" 2>&1
+done
+# pilots at their final checkpoint only, to measure the lr effect within each architecture (reviewer P2)
+for d in "$R"/*_pilot_lr*/; do
+  [ -d "$d" ] || continue; n=$(basename "$d"); [ -f "$d/analysis/step_$(printf %06d "$STEPS").json" ] && continue
+  [ -f "$d/ckpt/step_$(printf %06d "$STEPS").pt" ] || continue
+  uv run python -m prt.analysis "$d" --n_eval "$NEVAL" --steps 0 "$STEPS" > "$EXP_DIR/logs/analysis_$n.log" 2>&1
 done
 uv run python "$EXP_DIR/summarize.py" "$R" "$EXP_DIR/results.json"
 uv run python "$EXP_DIR/plot.py" "$EXP_DIR/results.json" "$EXP_DIR/figures"

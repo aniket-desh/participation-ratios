@@ -24,9 +24,11 @@ The conditions are fixed in advance at the two anisotropic reliabilities, q2 ∈
 ## Hypothesis
 
 Descriptive batch. Plan H3 (attention and MLP have distinct predicted geometries) cannot be tested as a prediction here, because no constrained-update calculation for this architecture exists yet. What can be assessed is whether the geometry is **architecture-dependent** at all:
-- **A1, MLP dependence.** Removing the MLP changes the final residual's belief geometry: at `resid_post`, the seed-mean factor-1 share of the token-partialled belief metric (in m or in u) differs between attention-only and baseline by more than 0.1, or PR(C_h) differs by more than 5%, in either condition. Against: neither difference exceeds those sizes, or both lie within twice the larger seed SD.
-- **A2, normalization dependence.** The same comparison for pre-LayerNorm vs baseline, and within the pre-LN model for `ln2` vs `resid_mid` (the normalized MLP input vs the raw residual it comes from).
-- **A3, MLP-stage change within the baseline.** In the baseline model, `resid_post` differs from `resid_mid` in partialled factor-1 share by more than 0.1, which would mean the MLP reshapes the belief geometry that attention wrote.
+Each comparison gets **two separate verdicts**, one for the token-partialled belief metric (factor-1 share of normalized E_bᵀE_b, in m and in u, read only where beliefs add ≥ 0.01 R² beyond the final token) and one for PR(C_h) of the full covariance. They are kept apart because the MLP can add belief-unrelated variance that moves PR(C_h) without changing the belief metric, which is what the question is about.
+- **A1, MLP dependence.** Attention-only vs baseline, at `resid_post`.
+- **A2, normalization dependence.** Pre-LN vs baseline at `resid_post`, and, within the pre-LN model, `ln2` vs `resid_mid` (the normalized MLP input vs the raw residual it comes from). This `--norm pre` normalizes the branch inputs only. There is no final LayerNorm before the readout, unlike standard pre-LN transformers.
+- **A3, MLP-stage change within the baseline.** `resid_post` vs `resid_mid` in the baseline model, which asks whether the MLP reshapes the belief geometry that attention wrote.
+The rules that turn these into verdicts are under "Success and failure criteria".
 
 ## Method
 
@@ -58,7 +60,7 @@ set -euo pipefail
 bash $EXP_DIR/run.sh
 ```
 
-`run.sh` runs the nine pilots (3 archs × 3 lrs; 4 concurrent), the per-architecture lr selection → `$EXP_DIR/lr_{base,nomlp,preln}.json`, the 18 main runs (4 concurrent), analysis of the main runs, `summarize.py` → `$EXP_DIR/results.json`, and `plot.py` → `$EXP_DIR/figures/sites_q{0.25,0.8}.png`. Completed runs are skipped on a rerun.
+`run.sh` runs the nine pilots (3 archs × 3 lrs; 4 concurrent; a diverged pilot does not stop the driver), the per-architecture lr selection → `$EXP_DIR/lr_{base,nomlp,preln}.json` (`"lr": null` if no pilot is stable, and that arm is skipped), the 18 main runs (4 concurrent), analysis of every checkpoint of the main runs, analysis of the pilots at steps 0 and 20,000, `summarize.py` → `$EXP_DIR/results.json`, and `plot.py` → `$EXP_DIR/figures/sites_q{0.25,0.8}.png`. Completed runs are skipped on a rerun.
 
 ## Expected outputs
 
@@ -78,13 +80,17 @@ bash $EXP_DIR/run.sh
 
 The run **succeeded** if all 18 main runs finish with finite losses and have analysis files.
 
-Prediction-quality bar: a main run passes if its final-position KL(Bayes‖model) is below its own `kl_lastk_final[4]`. An architecture–condition cell with fewer than two passing seeds is reported, but excluded from the A1–A3 comparisons, which are then inconclusive for that cell. Whether `nomlp` can reach the bar at all is itself a reported result.
+**Prediction-quality bar.** A main run passes if the mean of its final-position KL(Bayes‖model) over the last quarter of evaluations (steps 15,000–20,000, `kl_final_tailmean` in `results.json`) is below its own `kl_lastk_final["4"]`. A single final evaluation is not used: in Batch 2's live baseline runs at q2 = 0.8 the final-position KL ranged 0.0006–0.0017 over steps 15k–20k, against a k = 4 floor of 0.00132 (reviewer check). An architecture–condition cell with fewer than two passing seeds is reported, but its comparisons are inconclusive. Whether `nomlp` can reach the bar at all is itself a reported result.
 
-Grading, at step 20,000, seed means over passing runs, site `L0.resid_post` unless stated:
-- **A1 supported** (MLP-dependent geometry) if, in at least one condition, |Δ factor-1 share| > 0.1 (m or u, where defined) or |ΔPR(C_h)|/PR > 5% between `nomlp` and `base`, with the difference also larger than twice the larger of the two cells' seed SDs. **Not supported** if, in both conditions, all of these differences are below those sizes. Otherwise **inconclusive**.
-- **A2** graded the same way for `preln` vs `base`, and separately for `ln2` vs `resid_mid` within `preln`.
-- **A3** graded the same way for `resid_post` vs `resid_mid` within `base`.
-- Also reported: PR(C_h) and the belief-specific R² gain at every site for every run, the selected lr per architecture, and final excess KL against the k = 1–4 floors.
+**Matched prediction quality.** For every comparison, report the ratio of the two cells' seed-mean tail-mean excess KL. If the ratio exceeds 2, any difference found in that comparison is labelled "confounded with prediction quality" instead of "supported", because a worse predictor may simply encode differently.
+
+**Verdict rule**, applied separately to (i) the partialled belief metric (m and u factor-1 share; the larger |Δ| of the two decides) and (ii) PR(C_h), at step 20,000, using seed means over passing runs. Δ is the difference between the two cells, and SD is the larger of the two cells' seed SDs:
+- **Supported** if, in at least one condition, |Δ| exceeds its threshold (0.1 for factor-1 share, 5% relative for PR(C_h)), |Δ| > 2·SD, |Δ| is larger than the same difference at step 0, and the excess-KL ratio is at most 2.
+- **Not supported** if, in both conditions, |Δ| is below its threshold and 2·SD is also below the threshold, so a shift of the threshold size would have been detectable.
+- **Inconclusive** otherwise, including whenever seed noise is too large to rule out a threshold-sized shift.
+- For A1 and A3, same-seed runs share their initial embedding and attention weights (A1) or are the same model (A3). The per-seed paired differences are reported alongside the unpaired rule as a tighter descriptive check. Verdicts use the unpaired rule.
+
+Also reported: every graded Δ at step 0 next to step 20,000; PR(C_h) and the belief-specific R² gain at every site for every run; the selected lr per architecture; final excess KL against the k = 1–4 floors. Where the selected lrs differ between compared architectures, also each architecture's within-pilot lr effect (pilots are analyzed at steps 0 and 20,000), so lr and architecture effects can be compared.
 
 The run **failed** if every pilot of an architecture is unstable (then that architecture's arm is reported as failed and the others proceed), or if no main-run analysis exists.
 
@@ -106,7 +112,14 @@ None asked: the user was away and gave a standing go-ahead for the plan's experi
 
 ## Review
 
-<fill>
+First review (experiment-reviewer): no P0.
+- P1, the bar relied on one noisy final KL reading, and prediction quality was unmatched across architectures. **Fixed:** the bar uses the tail mean over the last quarter of evaluations, and a comparison with an excess-KL ratio above 2 is labelled "confounded with prediction quality".
+- P1, seed noise produced "not supported". **Fixed:** "not supported" now also requires 2·SD to be below the threshold. Everything else is inconclusive, with the same wording in the Hypothesis and criteria sections.
+- P1, the headline could rest on PR(C_h) alone. **Fixed:** two separate verdicts per comparison (belief metric; full PR).
+- P2, one crashing pilot would stop the driver. **Fixed:** `|| true` on the training stages, and `select_lr.py` writes `lr: null` when no pilot is stable or finished, so that arm is skipped.
+- P2, lr was confounded with architecture. **Fixed:** pilots are analyzed at steps 0 and 20,000, and the within-pilot lr effect is reported where selected lrs differ.
+- P2, step-0 differences were unused. **Fixed:** a supported Δ must exceed its step-0 value, and both are reported.
+- Notes adopted: paired per-seed differences are reported, and the write-up must state that `--norm pre` has no final LayerNorm. Reviewer timing from Batch 2's live worker (220–240 s per 20k-step run with 4 concurrent; about 13.5 s analysis per checkpoint) puts this batch at about 1.5–2 h, inside the 4 h cap.
 
 ## Amendments
 

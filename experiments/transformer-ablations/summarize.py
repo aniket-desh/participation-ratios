@@ -7,7 +7,10 @@ R, out = Path(sys.argv[1]), Path(sys.argv[2])
 recs = []
 for run in sorted(p for p in R.iterdir() if (p / "config.json").exists() and not p.name.startswith("_")):
     cfg = json.loads((run / "config.json").read_text())
-    metrics = {r["step"]: r for r in map(json.loads, open(run / "metrics.jsonl"))}
+    mlist = [json.loads(l) for l in open(run / "metrics.jsonl")]
+    metrics = {r["step"]: r for r in mlist}
+    tail = mlist[-max(1, len(mlist) // 4):]                     # last quarter of evaluations (reviewer P1)
+    kl_final_tailmean = sum(r["kl_final"] for r in tail) / len(tail)
     for adir in sorted(run.glob("analysis*")):
         for f in sorted(adir.glob("step_*.json")):
             a = json.loads(f.read_text())
@@ -29,6 +32,6 @@ for run in sorted(p for p in R.iterdir() if (p / "config.json").exists() and not
             recs.append(dict(run=run.name, analysis=adir.name, step=meta["step"], n_eval=meta["n_eval"],
                              q2=cfg["q2"], seed=cfg["seed"], lr=cfg["lr"], shuffled=cfg.get("shuffled", False),
                              perm_seed=cfg["perm_seed"], norm=cfg["norm"], mlp=not cfg["no_mlp"], arch=run.name.split("_")[0], kl=m.get("kl"), kl_final=m.get("kl_final"),
-                             kl_uniform_final=cfg.get("kl_uniform_final"), kl_lastk_final=cfg.get("kl_lastk_final"), generator=meta["generator"], sites=sites))
+                             kl_uniform_final=cfg.get("kl_uniform_final"), kl_lastk_final=cfg.get("kl_lastk_final"), kl_final_tailmean=kl_final_tailmean, generator=meta["generator"], sites=sites))
 out.write_text(json.dumps(recs))
 print(f"{len(recs)} records -> {out}")
