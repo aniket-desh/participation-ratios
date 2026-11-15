@@ -128,7 +128,7 @@ Re-check: all first-round P1s were confirmed fixed, and the partialled block was
 
 ## Amendments
 
-None.
+**A1 (2026-11-15 ~21:40 UTC, from the planning session `pr-work`, recorded by the supervisor before any grading).** The prediction-quality bar is applied to the **mean of `kl_final` over the last quarter of evaluations (steps 15,000–20,000, 21 evaluations)** of each run instead of the single final evaluation; the single-final-evaluation verdict is reported alongside. The "final excess KL matched within 2x" condition of the seed-consistency criterion uses the same tail mean. Reason given: a reviewer of Batch 3 found from validation KL logs that at q2 = 0.8 the final-position KL fluctuates between about 0.0006 and 0.0017 in steps 15k–20k around a k = 4 floor of about 0.00132, so a single evaluation decides the bar by noise. Supervisor's check of the worker's `metrics.jsonl` confirmed this (q2 = 0.8 tail ranges 0.00059–0.00181, floor 0.00132). Provenance note: the amendment arrived after all training had finished, and the supervisor's check showed both verdicts before recording it: under the tail mean all nine main runs pass; under the single final evaluation, main_q0.8_s2 is at the floor (0.00132 vs 0.00132) and the other eight pass. No belief-metric, H1/H1u or seed-consistency quantity had been looked at. Both verdicts are reported in the write-up.
 
 ## Outcome
 
