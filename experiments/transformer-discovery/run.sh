@@ -32,8 +32,8 @@ echo "selected lr=$LR"
 } | xargs -P "$PAR" -L1 bash -c 'train "$@"' _
 
 # (4) analysis of every checkpoint of every run (main, controls, pilots)
-for d in "$R"/*/; do
-  n=$(basename "$d"); [ -f "$d/analysis/step_$(printf %06d "$STEPS").json" ] && continue
+for d in "$R"/main_*/ "$R"/ctrl_*/ "$R"/pilot_*/; do     # main runs first (priority if time runs short)
+  [ -d "$d" ] || continue; n=$(basename "$d"); [ -f "$d/analysis/step_$(printf %06d "$STEPS").json" ] && continue
   uv run python -m prt.analysis "$d" --n_eval "$NEVAL" > "$EXP_DIR/logs/analysis_$n.log" 2>&1
 done
 

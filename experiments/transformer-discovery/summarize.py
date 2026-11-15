@@ -22,11 +22,13 @@ for run in sorted(p for p in R.iterdir() if (p / "config.json").exists()):
                                                 "Gw_norm_eigs", "reverse_r2"]}
                     s[cs]["pr_C_belief"] = d["C_belief"]["pr"]
                     s[cs]["pr_C_res"] = d["C_res"]["pr"]
+                    if "partialled" in d:
+                        s[cs]["partialled"] = d["partialled"]
                 sites[site] = s
             m = metrics.get(meta["step"], {})
             recs.append(dict(run=run.name, analysis=adir.name, step=meta["step"], n_eval=meta["n_eval"],
                              q2=cfg["q2"], seed=cfg["seed"], lr=cfg["lr"], shuffled=cfg.get("shuffled", False),
                              perm_seed=cfg["perm_seed"], kl=m.get("kl"), kl_final=m.get("kl_final"),
-                             kl_uniform_final=cfg.get("kl_uniform_final"), generator=meta["generator"], sites=sites))
+                             kl_uniform_final=cfg.get("kl_uniform_final"), kl_lastk_final=cfg.get("kl_lastk_final"), generator=meta["generator"], sites=sites))
 out.write_text(json.dumps(recs))
 print(f"{len(recs)} records -> {out}")

@@ -88,6 +88,13 @@ def main(argv=None):
     # Reference scale for excess loss: KL(Bayes || uniform predictor), per position averaged and at the final position.
     kl_unif = np.sum(val_bayes * np.log(val_bayes * 4), -1).mean(0)
     cfg["kl_uniform"], cfg["kl_uniform_final"] = float(kl_unif.mean()), float(kl_unif[-1])
+    # Short-window floors: final-position KL(Bayes || best predictor that sees only the last k tokens). Under a
+    # stationary start, that predictor is the exact filter started from pi on the last k tokens.
+    final = val_bayes[:, -1]
+    cfg["kl_lastk_final"] = {}
+    for k in range(1, 5):
+        pk = hmm.next_token_probs(hmm.filter(val_toks[:, a.ctx - k:a.ctx]))
+        cfg["kl_lastk_final"][k] = float(np.mean(np.sum(final * np.log(final / pk), -1)))
     (out / "config.json").write_text(json.dumps(cfg, indent=1))
     schedule = sorted({s for s in SCHEDULE if s <= a.steps} | {a.steps})
 

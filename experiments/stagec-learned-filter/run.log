@@ -1,0 +1,4 @@
+q1=0.1: ODE beta=0.0328 PR=1.9674 | SGD beta=0.0355±0.0017 PR=1.9714±0.0000 | weak-signal beta=-log rho1=0.2231
+q1=0.25: ODE beta=0.2653 PR=1.9946 | SGD beta=0.2755±0.0040 PR=1.9947±0.0000 | weak-signal beta=-log rho1=0.2231
+q1=0.5: ODE beta=0.4265 PR=1.9815 | SGD beta=0.4248±0.0110 PR=1.9801±0.0006 | weak-signal beta=-log rho1=0.2231
+q1=0.8: ODE beta=0.8884 PR=1.9375 | SGD beta=0.8812±0.0047 PR=1.9380±0.0006 | weak-signal beta=-log rho1=0.2231

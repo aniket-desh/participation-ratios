@@ -88,6 +88,24 @@ def decompose(H_tr, B_tr, H_te, B_te):
     )
 
 
+def partialled_belief_block(H, B, k):
+    """Belief block of a joint fit h ≈ c + E [b, onehot]: E_b = E[:, :k] with token identity partialled out.
+
+    Returns the trace-normalized eigenvalues of G_b = E_b^T E_b, the PR of E_b Sigma_b E_b^T (Sigma_b = Cov(b)),
+    and the trace of G_b. An isometric belief encoding has G_b ∝ I, so PR(E_b Sigma_b E_b^T) equals the generator-only
+    isometric PR of the same coordinates. The one-hot is collinear with the intercept; lstsq returns the minimum-norm
+    solution, which leaves E_b unaffected because b is not collinear with the one-hot.
+    """
+    _, W = lstsq_affine(B, H)
+    Eb = W[:k].T                                   # (d, k)
+    Gb = Eb.T @ Eb
+    _, Sb = weighted_cov(B[:, :k])
+    C = Eb @ Sb @ Eb.T
+    tr = np.trace(Gb)
+    return dict(G_norm_eigs=(np.linalg.eigvalsh(Gb)[::-1] / tr).tolist(), trace_G=float(tr),
+                pr_C_belief=float(np.trace(C) ** 2 / np.sum(C * C)))
+
+
 def reverse_probe(H_tr, B_tr, H_te, B_te):
     c, W = lstsq_affine(H_tr, B_tr)
     resid = B_te - (c + H_te @ W)
@@ -115,6 +133,8 @@ def analyze_checkpoint(model, hmm_data, hmm_coords, toks, device):
             B = coords[name]
             rec[name] = decompose(H[:n], B[:n], H[n:], B[n:])
             rec[name]["reverse_r2"] = reverse_probe(H[:n], B[:n], H[n:], B[n:])
+            if name in ("m_token", "u_token"):
+                rec[name]["partialled"] = partialled_belief_block(H[:n], B[:n], k=2)
         out[site] = rec
     return out
 
