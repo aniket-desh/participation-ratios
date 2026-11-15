@@ -143,6 +143,9 @@ def main(argv=None):
     v1, v2 = float(Cm[0, 0]), float(Cm[1, 1])
     gen_ref = dict(v1=v1, v2=v2, cov_m12=float(Cm[0, 1]), pr_factored=(v1 + v2) ** 2 / (v1**2 + v2**2),
                    pr_joint_walsh=float(np.trace(Cw) ** 2 / np.sum(Cw * Cw)))
+    if "u" in co:  # isometric encoding of the readout coordinates u = atanh(rho q m) (plan §3.3)
+        _, Cu = weighted_cov(co["u"])
+        gen_ref["pr_u_isometric"] = float(np.trace(Cu) ** 2 / np.sum(Cu * Cu))
     ckpts = sorted((run / "ckpt").glob("step_*.pt"))
     if a.steps is not None:
         ckpts = [c for c in ckpts if int(c.stem.split("_")[1]) in set(a.steps)]

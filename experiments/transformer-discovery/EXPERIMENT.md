@@ -23,6 +23,7 @@ When a small nonlinear transformer (L=1, d=64, H=2, d_h=32, GELU MLP, no normali
 
 Discovery batch; hypotheses are labelled as in plan §8.2 and assessed, not assumed.
 - H1 (isometric belief encoding): at the final checkpoint, `L0.resid_post`, PR(C_belief) with b = m is within 10% of the generator-only factored PR for every condition, and trace-normalized G has eigenvalues within 0.1 of 1/2. Against: e_PR > 0.1 in any condition consistently across all three seeds, or normalized-G eigenvalue gaps that vary systematically with q2.
+- H1u (isometric readout-coordinate encoding): the same test with b = u against the generator-only PR of Cov(u), which differs sharply from the m prediction in the anisotropic conditions (Batch 0 exact T=6: 1.157 vs 1.606 at q2 = 0.25; 1.341 vs 1.855 at q2 = 0.8).
 - H2 (readout coordinates): held-out forward-regression R² with b = u exceeds b = m by more than 0.01 and by more than twice the seed-to-seed SD in at least two of three conditions. Against: no such gap.
 - H4 (nuisance content): the final token's one-hot explains a large share of `resid_post` variance; m+token explains substantially more than m alone. Reported descriptively (fractions with seed spread); no threshold is claimed as a test.
 - Seed consistency: within each condition, the coefficient of variation of PR(C_h) across the three seeds is below 5%. If it is above 5% while final excess KL is matched (within 2x), that is evidence against a generator-only PR law (plan §8.2 last paragraph).
@@ -39,7 +40,7 @@ Learning rate: pilot on q2 = 0.5 with lr ∈ {1e-4, 3e-4, 1e-3}, pilot seed 100 
 
 Main sweep: q2 ∈ {0.25, 0.5, 0.8} × seeds {0, 1, 2} (nine runs).
 
-Analysis (`prt/analysis.py`), every checkpoint, final position only, n_eval = 65,536 independent contexts (eval seed 7) at sites `L0.resid_pre` (embedding), `attn_out`, `resid_mid`, `mlp_out`, `resid_post`: spectrum of C_h (trace, PR, nPR, d95, normalized eigenvalues) on all contexts; for coordinate sets m, u, m_aug = (m1,m2,m1m2), walsh, last_token (one-hot), m_token, u_token: forward least-squares regression h ≈ c + E b fitted on the first 32,768 contexts and evaluated on the other 32,768, giving held-out R², explained-trace fraction, C_belief/C_res PR, the relative Frobenius size of the cross term C_cross, trace-normalized G = EᵀE and Σ_b^{1/2} G Σ_b^{1/2}; reverse probe h → b held-out R². Generator-only references (v1, v2, factored PR, joint Walsh PR) are computed on the same eval contexts. All coordinate sets were declared before any trained model was analyzed (plan §3.3).
+Analysis (`prt/analysis.py`), every checkpoint, final position only, n_eval = 65,536 independent contexts (eval seed 7) at sites `L0.resid_pre` (embedding), `attn_out`, `resid_mid`, `mlp_out`, `resid_post`: spectrum of C_h (trace, PR, nPR, d95, normalized eigenvalues) on all contexts; for coordinate sets m, u, m_aug = (m1,m2,m1m2), walsh, last_token (one-hot), m_token, u_token: forward least-squares regression h ≈ c + E b fitted on the first 32,768 contexts and evaluated on the other 32,768, giving held-out R², explained-trace fraction, C_belief/C_res PR, the relative Frobenius size of the cross term C_cross, trace-normalized G = EᵀE and Σ_b^{1/2} G Σ_b^{1/2}; reverse probe h → b held-out R². Generator-only references (v1, v2, factored PR, joint Walsh PR, isometric-u PR) are computed on the same eval contexts. All coordinate sets were declared before any trained model was analyzed (plan §3.3).
 
 Evaluation-sample check (plan §9.4): final checkpoint of each main run re-analyzed with n_eval = 16,384 and 262,144.
 
@@ -79,6 +80,7 @@ bash $EXP_DIR/run.sh
 
 The run **succeeded** (produced an answer) if all nine main runs finish 20,000 steps with finite losses, final-position excess KL below 10% of KL(Bayes‖uniform) at the final position in every main run, and every analysis file exists. Then each hypothesis is graded as stated under Hypothesis, at step 20,000, site `L0.resid_post`, n_eval 65,536:
 - H1 **supported** if e_PR(PR(C_belief, m), factored PR) < 0.1 and both normalized-G eigenvalues are within 0.1 of 0.5 in all nine main runs; **not supported** if e_PR > 0.1 in all three seeds of at least one condition; otherwise **inconclusive**.
+- H1u graded by the same rule with b = u and the generator-only PR of Cov(u) (`pr_u_isometric`).
 - H2 **supported** / **not supported** by the R² gap rule above.
 - Seed consistency: CV(PR(C_h)) < 5% in each condition, or not.
 - Measurement validity: PR(C_h) at n_eval 65,536 within 1% of the 262,144 value at the final checkpoint for every main run; otherwise the PR claims are marked as sample-limited.
