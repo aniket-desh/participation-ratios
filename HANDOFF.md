@@ -21,6 +21,8 @@ Written for Aniket, who was away. This file is updated as the work goes; the new
 - **Token-identity coordinate sets were added to the analysis** (`last_token`, `m_token`, `u_token`) as a declared control. The final-position residual contains the last token's embedding, which by itself spans rank 3.
 - **The held-out reliabilities are locked at $q_2\in\{0.35,0.65\}$** in Batch 0, before any model was analyzed.
 - **Batch 2 started while Batch 1 was still running.** Gate A and Gate B checks were already passing in `tests/`, and Batch 2 is a discovery batch, not a claim about trained-metric prediction.
+- **I amended Batch 2's prediction-quality bar mid-run (before grading).** It now uses the tail mean of final-position KL over steps 15k–20k instead of the single last evaluation. The Batch 3 reviewer found that, in Batch 2's live logs, the single-evaluation KL at q2 = 0.8 fluctuates around the k = 4 floor (0.0006–0.0017 against 0.00132). The supervisor was asked to record this under Amendments and to report both verdicts.
+- **Batch 3 (architecture ablations) runs in parallel with Batch 2,** with its conditions fixed in advance at q2 ∈ {0.25, 0.8} rather than chosen after Batch 2. It has its own baseline arm and its own per-architecture lr pilots, so it is self-contained.
 - The rest are listed in each experiment's definition under "Questions asked before launch".
 
 ## Things you should know
