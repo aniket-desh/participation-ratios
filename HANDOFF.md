@@ -19,7 +19,7 @@ Written for Aniket, who was away. This file is updated as the work goes; the new
 | Batch 3b, seeds 3–5 for the ablations, graded with Batch 3's rules on six seeds (GPU) | approved (review skipped: a rerun with new seeds; the grader reproduces Batch 3 exactly), supervisor `exp-transformer-ablations-seeds` | `experiments/transformer-ablations-seeds/` |
 | Batch 2 small-transformer discovery (GPU) | **done, inconclusive**: the token-partialled belief metric is much nearer isometric in m than in u (6/6 anisotropic runs), so H1u is not supported. H1 misses "supported" by one q2 = 0.8 seed (top eig 0.615), and depends on which KL bar you accept (see below). Cost $0.78 | `experiments/transformer-discovery/README.md`, `SUPERVISOR.md` |
 | Batch 4 confirmatory sweep with locked m-isometry prediction, held-out q2 ∈ {0.2, 0.35, 0.65, 0.9}, 5 seeds × 7 reliabilities (GPU) | reviewed twice, approved, supervisor `exp-transformer-confirm` | `experiments/transformer-confirm/` |
-| Batch 2b longer training (50k steps) to test whether the m-isometry persists (GPU) | approved (review skipped: a rerun of the Batch 2 design with a longer horizon), supervisor `exp-transformer-longrun` | `experiments/transformer-longrun/` |
+| Batch 2b longer training (50k steps) to test whether the m-isometry persists (GPU) | **done, stable m-isometry**: 11/12 runs in band at 50k, m closer than u in 9/9 anisotropic runs, median drift of the top eigenvalue 0.019 from 20k to 50k. q2 = 0.8 seeds wander near the band edge. PR(C_h) still falling (−2.7% over the last 10k). Seeds 0–2 reproduce Batch 2 at 20k to 1e-4. Cost $0.46 | `experiments/transformer-longrun/README.md`, `SUPERVISOR.md` |
 
 ## Decisions made in your absence (please review)
 
