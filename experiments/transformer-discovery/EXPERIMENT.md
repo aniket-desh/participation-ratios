@@ -1,7 +1,7 @@
 ---
 name: transformer-discovery
 title: Batch 2: small-transformer discovery on the binary two-factor generator
-status: approved
+status: done
 gpu: NVIDIA A40,NVIDIA RTX A6000,NVIDIA GeForce RTX 5090,NVIDIA A100 80GB PCIe
 count: 1
 hours: 3
@@ -10,6 +10,9 @@ disk_gb: 40
 data:
 secrets:
 approved_utc: 2026-11-15T21:11:31Z
+result: inconclusive
+finished_utc: 2026-11-15T22:40:40Z
+writeup: experiments/transformer-discovery/README.md
 ---
 
 # Batch 2: small-transformer discovery on the binary two-factor generator
@@ -132,4 +135,15 @@ Re-check: all first-round P1s were confirmed fixed, and the partialled block was
 
 ## Outcome
 
-Not run yet.
+**Inconclusive** (2026-11-15). Write-up: [README.md](README.md); numbers in [grade.json](grade.json).
+- Run succeeded: all 9 main runs and 3 controls reached 20,000 steps with finite losses, and every analysis file exists. lr = 1e-3 was selected by the declared rule.
+- Prediction-quality bar (A1, tail mean): 9/9 pass. Under the original single-final rule 8/9 pass, and q2 = 0.8 seed 2 misses by 0.4%.
+- Belief-content precondition: 9/9 pass (Δ 0.24–0.45; Δ_shuf = −0.001).
+- H1: inconclusive. 8/9 runs are in band with e_PR ≤ 0.062, but q2 = 0.8 seed 2 has top eig 0.615 and e_PR 0.141. The factor-1 share difference is 0.091. Under the original bar H1 would be supported.
+- H1u: not supported. The u top eig is 0.68–0.80 in all 6 anisotropic runs, and the factor-1 share difference is 0.51.
+- m vs u: m favored, 6/6. The ordering already holds weakly at step 0 and rests on the belief-content precondition.
+- Seed consistency: met. CV of PR(C_h) is 4.7%, 1.7% and 2.7%, and the tail-KL ratio is ≤ 1.21.
+- Measurement validity: met, within 0.25% of the n = 262,144 value.
+- Shuffled control: Δ_shuf = −0.001 < 0.01. Permutation control: passes for both runs.
+- Caveat: PR(C_h) fell between 10k and 20k in every main run, so the representation hadn't settled.
+- Cost: one A40, 1 h 19 min, about $0.78, against the 3 h cap and $8 budget.
