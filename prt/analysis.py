@@ -125,6 +125,7 @@ def main(argv=None):
     ap.add_argument("--n_eval", type=int, default=65536)
     ap.add_argument("--eval_seed", type=int, default=7)
     ap.add_argument("--steps", type=int, nargs="*", default=None)
+    ap.add_argument("--tag", default="", help="suffix for the output folder, e.g. n262144 for a sample-size check")
     ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     a = ap.parse_args(argv)
     run = Path(a.run)
@@ -133,15 +134,23 @@ def main(argv=None):
     hmm_coords = make_hmm({**cfg, "shuffled": False})
     toks = hmm_data.sample(a.n_eval, cfg["ctx"], np.random.default_rng(a.eval_seed))
     model = Transformer(ModelConfig(**cfg["model"])).to(a.device)
-    (run / "analysis").mkdir(exist_ok=True)
+    outdir = run / ("analysis" + (f"_{a.tag}" if a.tag else ""))
+    outdir.mkdir(exist_ok=True)
+    # Generator-only references on the same eval contexts (level-1 benchmarks, plan §3.2): v_a, factored and joint PR.
+    co = belief_coordinates(hmm_coords, hmm_coords.filter(toks))
+    _, Cm = weighted_cov(co["m"])
+    _, Cw = weighted_cov(co["walsh"])
+    v1, v2 = float(Cm[0, 0]), float(Cm[1, 1])
+    gen_ref = dict(v1=v1, v2=v2, cov_m12=float(Cm[0, 1]), pr_factored=(v1 + v2) ** 2 / (v1**2 + v2**2),
+                   pr_joint_walsh=float(np.trace(Cw) ** 2 / np.sum(Cw * Cw)))
     ckpts = sorted((run / "ckpt").glob("step_*.pt"))
     if a.steps is not None:
         ckpts = [c for c in ckpts if int(c.stem.split("_")[1]) in set(a.steps)]
     for ck in ckpts:
         model.load_state_dict(torch.load(ck, map_location=a.device))
         res = analyze_checkpoint(model, hmm_data, hmm_coords, toks, a.device)
-        res["_meta"] = dict(step=int(ck.stem.split("_")[1]), n_eval=a.n_eval, eval_seed=a.eval_seed)
-        (run / "analysis" / f"{ck.stem}.json").write_text(json.dumps(res))
+        res["_meta"] = dict(step=int(ck.stem.split("_")[1]), n_eval=a.n_eval, eval_seed=a.eval_seed, generator=gen_ref)
+        (outdir / f"{ck.stem}.json").write_text(json.dumps(res))
         print(ck.stem, {s: round(r["C_h"]["pr"], 3) for s, r in res.items() if s != "_meta"}, flush=True)
 
 

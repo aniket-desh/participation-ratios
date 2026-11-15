@@ -80,12 +80,15 @@ def main(argv=None):
     opt = torch.optim.Adam(model.parameters(), lr=a.lr)
     cfg["model"] = model.config_dict()
     cfg["n_params"] = sum(p.numel() for p in model.parameters())
-    (out / "config.json").write_text(json.dumps(cfg, indent=1))
 
     rng_train = np.random.default_rng(a.seed * 1000 + 1)
     val_toks = hmm.sample(a.n_val, a.ctx + 1, np.random.default_rng(a.val_seed))
     val_bayes = hmm.bayes_predictive(val_toks[:, :-1])
     bayes_ce = float(-np.mean(np.log(np.take_along_axis(val_bayes, val_toks[:, 1:, None], -1))))
+    # Reference scale for excess loss: KL(Bayes || uniform predictor), per position averaged and at the final position.
+    kl_unif = np.sum(val_bayes * np.log(val_bayes * 4), -1).mean(0)
+    cfg["kl_uniform"], cfg["kl_uniform_final"] = float(kl_unif.mean()), float(kl_unif[-1])
+    (out / "config.json").write_text(json.dumps(cfg, indent=1))
     schedule = sorted({s for s in SCHEDULE if s <= a.steps} | {a.steps})
 
     log = open(out / "metrics.jsonl", "w")
