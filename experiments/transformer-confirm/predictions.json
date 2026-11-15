@@ -1,0 +1,9 @@
+{
+ "locked": "2026-11-15, before any Batch 4 run, from Batch 2 discovery (experiments/transformer-discovery/grade.json)",
+ "site": "L0.resid_post", "step": 20000,
+ "P1_geometry": "token-partialled belief metric G_b (b = m) is near-isotropic: both normalized eigenvalues in [0.4, 0.6]",
+ "P2_pr_curve": "PR(E_b Sigma_m E_b^T) of the partialled belief block equals the generator-only isometric-in-m PR (v1+v2)^2/(v1^2+v2^2) computed on the same eval contexts, within 10% (e_PR < 0.1)",
+ "P3_m_over_u": "in anisotropic conditions the partialled metric is closer to isotropic in m than in u",
+ "reference_T16_mc_pr_factored": {"0.25": 1.6202, "0.35": 1.8823, "0.5": 1.99998, "0.65": 1.9481, "0.8": 1.8579},
+ "batch2_seed_means_for_context": {"0.25": {"pr_belief_m": 1.553, "top_m": 0.542}, "0.5": {"pr_belief_m": 1.992, "top_m": 0.531}, "0.8": {"pr_belief_m": 1.741, "top_m": 0.562}}
+}
