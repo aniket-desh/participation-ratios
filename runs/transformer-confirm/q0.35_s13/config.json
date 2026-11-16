@@ -1,0 +1,52 @@
+{
+ "out": "runs/transformer-confirm/q0.35_s13",
+ "rho1": 0.8,
+ "q1": 0.5,
+ "rho2": 0.8,
+ "q2": 0.35,
+ "eps": 0.0,
+ "c_corr": 0.8,
+ "perm_seed": 12345,
+ "shuffled": false,
+ "ctx": 16,
+ "d": 64,
+ "n_heads": 2,
+ "d_head": 32,
+ "n_layers": 1,
+ "norm": "none",
+ "no_mlp": false,
+ "lr": 0.001,
+ "batch": 256,
+ "steps": 20000,
+ "seed": 13,
+ "val_seed": 99,
+ "n_val": 8192,
+ "eval_every": 250,
+ "device": "cuda",
+ "perm": [
+  2,
+  0,
+  3,
+  1
+ ],
+ "model": {
+  "vocab": 4,
+  "ctx": 16,
+  "d": 64,
+  "n_heads": 2,
+  "d_head": 32,
+  "n_layers": 1,
+  "mlp_mult": 4,
+  "norm": "none",
+  "mlp": true
+ },
+ "n_params": 51268,
+ "kl_uniform": 0.04151415319245633,
+ "kl_uniform_final": 0.04397364463729087,
+ "kl_lastk_final": {
+  "1": 0.018958088455398224,
+  "2": 0.008686668051989779,
+  "3": 0.003927170748512155,
+  "4": 0.0018302157485709256
+ }
+}

@@ -1,0 +1,52 @@
+{
+ "out": "runs/transformer-ablations/preln_pilot_lr1e-3",
+ "rho1": 0.8,
+ "q1": 0.5,
+ "rho2": 0.8,
+ "q2": 0.5,
+ "eps": 0.0,
+ "c_corr": 0.8,
+ "perm_seed": 12345,
+ "shuffled": false,
+ "ctx": 16,
+ "d": 64,
+ "n_heads": 2,
+ "d_head": 32,
+ "n_layers": 1,
+ "norm": "pre",
+ "no_mlp": false,
+ "lr": 0.001,
+ "batch": 256,
+ "steps": 20000,
+ "seed": 100,
+ "val_seed": 99,
+ "n_val": 8192,
+ "eval_every": 250,
+ "device": "cuda",
+ "perm": [
+  2,
+  0,
+  3,
+  1
+ ],
+ "model": {
+  "vocab": 4,
+  "ctx": 16,
+  "d": 64,
+  "n_heads": 2,
+  "d_head": 32,
+  "n_layers": 1,
+  "mlp_mult": 4,
+  "norm": "pre",
+  "mlp": true
+ },
+ "n_params": 51524,
+ "kl_uniform": 0.06522550981536551,
+ "kl_uniform_final": 0.06872831198525159,
+ "kl_lastk_final": {
+  "1": 0.02748744225335598,
+  "2": 0.012114597853195314,
+  "3": 0.005123968755289412,
+  "4": 0.002238240953195288
+ }
+}

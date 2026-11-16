@@ -1,0 +1,52 @@
+{
+ "out": "runs/transformer-discovery/ctrl_perm777_q0.25_s0",
+ "rho1": 0.8,
+ "q1": 0.5,
+ "rho2": 0.8,
+ "q2": 0.25,
+ "eps": 0.0,
+ "c_corr": 0.8,
+ "perm_seed": 777,
+ "shuffled": false,
+ "ctx": 16,
+ "d": 64,
+ "n_heads": 2,
+ "d_head": 32,
+ "n_layers": 1,
+ "norm": "none",
+ "no_mlp": false,
+ "lr": 0.001,
+ "batch": 256,
+ "steps": 20000,
+ "seed": 0,
+ "val_seed": 99,
+ "n_val": 8192,
+ "eval_every": 250,
+ "device": "cuda",
+ "perm": [
+  1,
+  3,
+  0,
+  2
+ ],
+ "model": {
+  "vocab": 4,
+  "ctx": 16,
+  "d": 64,
+  "n_heads": 2,
+  "d_head": 32,
+  "n_layers": 1,
+  "mlp_mult": 4,
+  "norm": "none",
+  "mlp": true
+ },
+ "n_params": 51268,
+ "kl_uniform": 0.03519155973200512,
+ "kl_uniform_final": 0.03699712591340992,
+ "kl_lastk_final": {
+  "1": 0.015588416743999587,
+  "2": 0.007061791002435952,
+  "3": 0.0031268613866361024,
+  "4": 0.0014520931408134367
+ }
+}
