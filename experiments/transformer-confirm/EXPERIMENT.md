@@ -1,7 +1,7 @@
 ---
 name: transformer-confirm
 title: Batch 4: locked prediction of the belief-component spectrum on held-out reliabilities
-status: approved
+status: done
 gpu: NVIDIA A40,NVIDIA RTX A6000,NVIDIA GeForce RTX 5090,NVIDIA A100 80GB PCIe
 count: 1
 hours: 3
@@ -10,6 +10,9 @@ disk_gb: 40
 data:
 secrets:
 approved_utc: 2026-11-15T22:48:14Z
+result: not-supported
+finished_utc: 2026-11-16T00:06:20Z
+writeup: experiments/transformer-confirm/README.md
 ---
 
 # Batch 4: locked prediction of the belief-component spectrum on held-out reliabilities
@@ -124,4 +127,12 @@ None.
 
 ## Outcome
 
-Not run yet.
+**Not supported** (2026-11-16). The locked m-isometric prediction holds at q2 = 0.2–0.65 but fails at held-out q2 = 0.9. Write-up: [README.md](README.md).
+- Run validity: 35 of 35 runs finished and passed (KL tail mean below the k = 4 floor, Δ 0.16–0.41). `run_failed` is false.
+- P1, geometry: not supported. 29/35 in band (83%), but the q2 = 0.9 seed-mean top eigenvalue is 0.668 > 0.6. The step-0 reference is also not supported (6/35 in band).
+- P1-learned: supported, 34/35 (97%) moved toward isotropy.
+- P2, m-isometric, held-out scope: not supported. Seed-mean e_PR is 0.008, 0.013 and 0.005 at 0.2, 0.35 and 0.65, and 0.222 at 0.9. All-reliability scope: not supported (q2 = 0.9 is the only reliability ≥ 0.1; 0.8 gives 0.066).
+- Alternatives (whitened, u-isometric, own step 0): all not supported on both scopes.
+- P2-discriminating (headline): not met.
+- P3, m over u: supported, 29/30 (97%), q2 = 0.9 at 4/5.
+- Cost: one A40, 1.16 h, about $0.68 of the $8 budget and 3 h cap. No amendments.
