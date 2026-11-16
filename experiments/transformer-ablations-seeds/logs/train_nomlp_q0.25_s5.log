@@ -1,0 +1,1 @@
+{"out": "runs/transformer-ablations-seeds/nomlp_q0.25_s5", "final": {"ce": 1.353092868525171, "kl": 0.0009574524509342131, "kl_final": 0.0010993616394241413, "ce_final": 1.3514749140623117}, "seconds": 139.67479491233826}

@@ -1,0 +1,15 @@
+step_000000 {'L0.resid_pre': 2.808, 'L0.ln1': 2.846, 'L0.attn_out': 2.783, 'L0.resid_mid': 2.84, 'L0.ln2': 2.883, 'L0.mlp_out': 2.601, 'L0.resid_post': 2.837}
+step_000001 {'L0.resid_pre': 2.808, 'L0.ln1': 2.846, 'L0.attn_out': 2.85, 'L0.resid_mid': 2.84, 'L0.ln2': 2.883, 'L0.mlp_out': 2.638, 'L0.resid_post': 2.836}
+step_000002 {'L0.resid_pre': 2.808, 'L0.ln1': 2.846, 'L0.attn_out': 2.912, 'L0.resid_mid': 2.84, 'L0.ln2': 2.882, 'L0.mlp_out': 2.656, 'L0.resid_post': 2.833}
+step_000005 {'L0.resid_pre': 2.807, 'L0.ln1': 2.845, 'L0.attn_out': 2.967, 'L0.resid_mid': 2.841, 'L0.ln2': 2.882, 'L0.mlp_out': 2.303, 'L0.resid_post': 2.819}
+step_000010 {'L0.resid_pre': 2.806, 'L0.ln1': 2.844, 'L0.attn_out': 2.784, 'L0.resid_mid': 2.841, 'L0.ln2': 2.881, 'L0.mlp_out': 2.005, 'L0.resid_post': 2.802}
+step_000020 {'L0.resid_pre': 2.805, 'L0.ln1': 2.844, 'L0.attn_out': 2.995, 'L0.resid_mid': 2.836, 'L0.ln2': 2.879, 'L0.mlp_out': 2.09, 'L0.resid_post': 2.806}
+step_000050 {'L0.resid_pre': 2.805, 'L0.ln1': 2.844, 'L0.attn_out': 2.137, 'L0.resid_mid': 2.85, 'L0.ln2': 2.887, 'L0.mlp_out': 1.987, 'L0.resid_post': 2.805}
+step_000100 {'L0.resid_pre': 2.805, 'L0.ln1': 2.847, 'L0.attn_out': 1.755, 'L0.resid_mid': 2.87, 'L0.ln2': 2.905, 'L0.mlp_out': 2.003, 'L0.resid_post': 2.824}
+step_000200 {'L0.resid_pre': 2.806, 'L0.ln1': 2.851, 'L0.attn_out': 1.681, 'L0.resid_mid': 2.912, 'L0.ln2': 2.943, 'L0.mlp_out': 1.871, 'L0.resid_post': 2.865}
+step_000500 {'L0.resid_pre': 2.806, 'L0.ln1': 2.854, 'L0.attn_out': 2.197, 'L0.resid_mid': 2.991, 'L0.ln2': 3.021, 'L0.mlp_out': 1.994, 'L0.resid_post': 2.954}
+step_001000 {'L0.resid_pre': 2.806, 'L0.ln1': 2.857, 'L0.attn_out': 2.22, 'L0.resid_mid': 3.032, 'L0.ln2': 3.073, 'L0.mlp_out': 1.893, 'L0.resid_post': 2.999}
+step_002000 {'L0.resid_pre': 2.804, 'L0.ln1': 2.86, 'L0.attn_out': 1.665, 'L0.resid_mid': 3.034, 'L0.ln2': 3.08, 'L0.mlp_out': 2.017, 'L0.resid_post': 3.006}
+step_005000 {'L0.resid_pre': 2.806, 'L0.ln1': 2.874, 'L0.attn_out': 1.353, 'L0.resid_mid': 3.475, 'L0.ln2': 3.558, 'L0.mlp_out': 2.847, 'L0.resid_post': 3.552}
+step_010000 {'L0.resid_pre': 2.822, 'L0.ln1': 2.888, 'L0.attn_out': 1.575, 'L0.resid_mid': 3.856, 'L0.ln2': 3.93, 'L0.mlp_out': 2.885, 'L0.resid_post': 2.33}
+step_020000 {'L0.resid_pre': 2.839, 'L0.ln1': 2.873, 'L0.attn_out': 1.6, 'L0.resid_mid': 3.892, 'L0.ln2': 3.545, 'L0.mlp_out': 3.511, 'L0.resid_post': 2.002}

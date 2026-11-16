@@ -1,0 +1,1 @@
+{"out": "runs/transformer-ablations-seeds/preln_q0.8_s4", "final": {"ce": 1.1918858619225932, "kl": 0.0007378094581604337, "kl_final": 0.0012183687537952446, "ce_final": 1.1848099990121819}, "seconds": 182.04997158050537}

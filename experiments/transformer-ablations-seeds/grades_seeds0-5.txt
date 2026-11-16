@@ -1,0 +1,88 @@
+selected lr: {'base': 0.001, 'nomlp': 0.001, 'preln': 0.001}
+base  q2=0.25 s0 lr=0.001 tailKL=0.0005875 floor4=0.001441 pass=True  resid_post PR=2.034 gain=0.4492 f1m=0.5223 f1u=0.2045
+base  q2=0.25 s1 lr=0.001 tailKL=0.0005978 floor4=0.001441 pass=True  resid_post PR=1.944 gain=0.4084 f1m=0.5482 f1u=0.2221
+base  q2=0.25 s2 lr=0.001 tailKL=0.0005396 floor4=0.001441 pass=True  resid_post PR=2.137 gain=0.3991 f1m=0.529 f1u=0.2088
+base  q2=0.25 s3 lr=0.001 tailKL=0.0006844 floor4=0.001441 pass=True  resid_post PR=2.088 gain=0.3921 f1m=0.4836 f1u=0.1805
+base  q2=0.25 s4 lr=0.001 tailKL=0.0007132 floor4=0.001441 pass=True  resid_post PR=1.931 gain=0.4134 f1m=0.5195 f1u=0.2027
+base  q2=0.25 s5 lr=0.001 tailKL=0.000564 floor4=0.001441 pass=True  resid_post PR=2.045 gain=0.3824 f1m=0.5124 f1u=0.1982
+base  q2=0.8  s0 lr=0.001 tailKL=0.0009387 floor4=0.00132 pass=True  resid_post PR=2.402 gain=0.2438 f1m=0.4694 f1u=0.7493
+base  q2=0.8  s1 lr=0.001 tailKL=0.001012 floor4=0.00132 pass=True  resid_post PR=2.44 gain=0.245 f1m=0.473 f1u=0.7514
+base  q2=0.8  s2 lr=0.001 tailKL=0.001122 floor4=0.00132 pass=True  resid_post PR=2.313 gain=0.245 f1m=0.3851 f1u=0.6768
+base  q2=0.8  s3 lr=0.001 tailKL=0.0009426 floor4=0.00132 pass=True  resid_post PR=2.512 gain=0.2449 f1m=0.5024 f1u=0.7727
+base  q2=0.8  s4 lr=0.001 tailKL=0.001096 floor4=0.00132 pass=True  resid_post PR=2.388 gain=0.2446 f1m=0.4562 f1u=0.7383
+base  q2=0.8  s5 lr=0.001 tailKL=0.001099 floor4=0.00132 pass=True  resid_post PR=2.359 gain=0.2345 f1m=0.4503 f1u=0.7333
+nomlp q2=0.25 s0 lr=0.001 tailKL=0.001091 floor4=0.001441 pass=True  resid_post PR=2.706 gain=0.3252 f1m=0.5623 f1u=0.2321
+nomlp q2=0.25 s1 lr=0.001 tailKL=0.001144 floor4=0.001441 pass=True  resid_post PR=2.63 gain=0.3377 f1m=0.5254 f1u=0.2067
+nomlp q2=0.25 s2 lr=0.001 tailKL=0.001205 floor4=0.001441 pass=True  resid_post PR=2.773 gain=0.3199 f1m=0.573 f1u=0.24
+nomlp q2=0.25 s3 lr=0.001 tailKL=0.001196 floor4=0.001441 pass=True  resid_post PR=3.069 gain=0.3206 f1m=0.4958 f1u=0.188
+nomlp q2=0.25 s4 lr=0.001 tailKL=0.001306 floor4=0.001441 pass=True  resid_post PR=2.99 gain=0.311 f1m=0.528 f1u=0.2084
+nomlp q2=0.25 s5 lr=0.001 tailKL=0.001195 floor4=0.001441 pass=True  resid_post PR=2.459 gain=0.318 f1m=0.5959 f1u=0.2576
+nomlp q2=0.8  s0 lr=0.001 tailKL=0.002461 floor4=0.00132 pass=False  resid_post PR=2.507 gain=0.1812 f1m=0.3253 f1u=0.6197
+nomlp q2=0.8  s1 lr=0.001 tailKL=0.002604 floor4=0.00132 pass=False  resid_post PR=2.569 gain=0.2068 f1m=0.3511 f1u=0.6459
+nomlp q2=0.8  s2 lr=0.001 tailKL=0.00269 floor4=0.00132 pass=False  resid_post PR=2.981 gain=0.1975 f1m=0.3034 f1u=0.5953
+nomlp q2=0.8  s3 lr=0.001 tailKL=0.002512 floor4=0.00132 pass=False  resid_post PR=3.202 gain=0.2029 f1m=0.2739 f1u=0.5597
+nomlp q2=0.8  s4 lr=0.001 tailKL=0.002578 floor4=0.00132 pass=False  resid_post PR=3.231 gain=0.1679 f1m=0.3221 f1u=0.6164
+nomlp q2=0.8  s5 lr=0.001 tailKL=0.002628 floor4=0.00132 pass=False  resid_post PR=2.783 gain=0.1807 f1m=0.3372 f1u=0.6318
+preln q2=0.25 s0 lr=0.001 tailKL=0.0005889 floor4=0.001441 pass=True  resid_post PR=2.127 gain=0.4295 f1m=0.5162 f1u=0.2005
+preln q2=0.25 s1 lr=0.001 tailKL=0.0005917 floor4=0.001441 pass=True  resid_post PR=1.938 gain=0.4093 f1m=0.5498 f1u=0.2231
+preln q2=0.25 s2 lr=0.001 tailKL=0.0005638 floor4=0.001441 pass=True  resid_post PR=1.998 gain=0.397 f1m=0.5578 f1u=0.2286
+preln q2=0.25 s3 lr=0.001 tailKL=0.0005438 floor4=0.001441 pass=True  resid_post PR=2.002 gain=0.3947 f1m=0.5189 f1u=0.2023
+preln q2=0.25 s4 lr=0.001 tailKL=0.000632 floor4=0.001441 pass=True  resid_post PR=1.929 gain=0.4338 f1m=0.5184 f1u=0.202
+preln q2=0.25 s5 lr=0.001 tailKL=0.0006132 floor4=0.001441 pass=True  resid_post PR=1.787 gain=0.3876 f1m=0.5767 f1u=0.2426
+preln q2=0.8  s0 lr=0.001 tailKL=0.0009656 floor4=0.00132 pass=True  resid_post PR=2.264 gain=0.2372 f1m=0.4443 f1u=0.7299
+preln q2=0.8  s1 lr=0.001 tailKL=0.0009658 floor4=0.00132 pass=True  resid_post PR=2.21 gain=0.2368 f1m=0.422 f1u=0.7109
+preln q2=0.8  s2 lr=0.001 tailKL=0.001114 floor4=0.00132 pass=True  resid_post PR=2.231 gain=0.2321 f1m=0.3876 f1u=0.6805
+preln q2=0.8  s3 lr=0.001 tailKL=0.0009082 floor4=0.00132 pass=True  resid_post PR=2.185 gain=0.2382 f1m=0.4224 f1u=0.711
+preln q2=0.8  s4 lr=0.001 tailKL=0.0009866 floor4=0.00132 pass=True  resid_post PR=2.221 gain=0.2326 f1m=0.3988 f1u=0.691
+preln q2=0.8  s5 lr=0.001 tailKL=0.001052 floor4=0.00132 pass=True  resid_post PR=2.266 gain=0.233 f1m=0.4088 f1u=0.699
+
+A1 nomlp vs base @resid_post [belief]: inconclusive
+  q2=0.25 f1_m: A=0.5467 (n6) B=0.5192 (n6) D=0.02755 SD=0.03673 thr=0.1 D0=  nan KLratio=1.936 paired={0: 0.04, 1: -0.0229, 2: 0.0439, 3: 0.0122, 4: 0.0085, 5: 0.0835}
+     (other coord f1_u: D=0.0193 SD=0.02558 D0=  nan)
+  q2=0.8 f1_m: A=  nan (n0) B=0.4561 (n6) D=  nan SD=0.03921 thr=0.1 D0=  nan KLratio=  nan paired={}
+     (other coord f1_u: D=  nan SD=0.03247 D0=  nan)
+
+A1 nomlp vs base @resid_post [pr]: supported
+  q2=0.25 pr: A=2.771 (n6) B=2.03 (n6) D=0.7414 SD=0.227 thr=0.1015 D0=0.008264 KLratio=1.936 paired={0: 0.6722, 1: 0.6858, 2: 0.6369, 3: 0.9809, 4: 1.0583, 5: 0.4141}
+  q2=0.8 pr: A=  nan (n0) B=2.402 (n6) D=  nan SD=0.06871 thr=0.1201 D0=  nan KLratio=  nan paired={}
+
+A2 preln vs base @resid_post [belief]: not supported
+  q2=0.25 f1_m: A=0.5396 (n6) B=0.5192 (n6) D=0.02047 SD=0.02543 thr=0.1 D0=  nan KLratio=1.043 paired={0: -0.0061, 1: 0.0016, 2: 0.0287, 3: 0.0353, 4: -0.001, 5: 0.0643}
+     (other coord f1_u: D=0.01372 SD=0.01755 D0=  nan)
+  q2=0.8 f1_m: A=0.414 (n6) B=0.4561 (n6) D=-0.04208 SD=0.03921 thr=0.1 D0=  nan KLratio=1.036 paired={0: -0.0252, 1: -0.051, 2: 0.0026, 3: -0.08, 4: -0.0574, 5: -0.0415}
+     (other coord f1_u: D=-0.03326 SD=0.03247 D0=  nan)
+
+A2 preln vs base @resid_post [pr]: supported
+  q2=0.25 pr: A=1.964 (n6) B=2.03 (n6) D=-0.06639 SD=0.1119 thr=0.1015 D0=-0.03097 KLratio=1.043 paired={0: 0.0934, 1: -0.0059, 2: -0.1387, 3: -0.086, 4: -0.0025, 5: -0.2587}
+  q2=0.8 pr: A=2.23 (n6) B=2.402 (n6) D=-0.173 SD=0.06871 thr=0.1201 D0=-0.05174 KLratio=1.036 paired={0: -0.1384, 1: -0.2303, 2: -0.082, 3: -0.3273, 4: -0.1671, 5: -0.0929}
+
+A2 preln ln2 vs resid_mid [belief]: not supported
+  q2=0.25 f1_m: A=0.6511 (n6) B=0.6304 (n6) D=0.02073 SD=0.03106 thr=0.1 D0=  nan KLratio=1 paired={0: 0.0237, 1: 0.0156, 2: -0.0244, 3: 0.0786, 4: 0.0395, 5: -0.0087}
+     (other coord f1_u: D=0.01911 SD=0.03013 D0=  nan)
+  q2=0.8 f1_u: A=0.6094 (n6) B=0.6107 (n6) D=-0.001316 SD=0.03319 thr=0.1 D0=  nan KLratio=1 paired={0: 0.0054, 1: -0.0144, 2: -0.0248, 3: 0.02, 4: 0.0046, 5: 0.0013}
+     (other coord f1_m: D=-0.001272 SD=0.02986 D0=  nan)
+
+A2 preln ln2 vs resid_mid [pr]: inconclusive
+  q2=0.25 pr: A=3.589 (n6) B=3.848 (n6) D=-0.2585 SD=0.3709 thr=0.1924 D0=-0.02129 KLratio=1 paired={0: -0.5357, 1: 0.1441, 2: 0.0829, 3: -0.3462, 4: -0.6404, 5: -0.256}
+  q2=0.8 pr: A=3.348 (n6) B=3.463 (n6) D=-0.1153 SD=0.1059 thr=0.1731 D0=-0.02213 KLratio=1 paired={0: -0.0422, 1: -0.2004, 2: -0.118, 3: -0.1322, 4: -0.1431, 5: -0.0556}
+
+A3 base resid_post vs resid_mid [belief]: supported
+  q2=0.25 f1_m: A=0.5192 (n6) B=0.6336 (n6) D=-0.1145 SD=0.02219 thr=0.1 D0=  nan KLratio=1 paired={0: -0.1107, 1: -0.0585, 2: -0.1251, 3: -0.1231, 4: -0.1338, 5: -0.1355}
+     (other coord f1_u: D=-0.08786 SD=0.0195 D0=  nan)
+  q2=0.8 f1_m: A=0.4561 (n6) B=0.3079 (n6) D=0.1482 SD=0.03921 thr=0.1 D0=  nan KLratio=1 paired={0: 0.1269, 1: 0.1933, 2: 0.066, 3: 0.2048, 4: 0.1768, 5: 0.121}
+     (other coord f1_u: D=0.1408 SD=0.03247 D0=  nan)
+
+A3 base resid_post vs resid_mid [pr]: supported
+  q2=0.25 pr: A=2.03 (n6) B=3.791 (n6) D=-1.761 SD=0.2012 thr=0.1896 D0=-0.008264 KLratio=1 paired={0: -1.5422, 1: -2.0479, 2: -1.64, 3: -1.9838, 4: -1.787, 5: -1.5681}
+  q2=0.8 pr: A=2.402 (n6) B=3.133 (n6) D=-0.7307 SD=0.06871 thr=0.1567 D0=-0.007113 KLratio=1 paired={0: -0.7324, 1: -0.6182, 2: -0.7988, 3: -0.6162, 4: -0.7513, 5: -0.8671}
+
+pilots @resid_post step 20000
+  base lr=0.0001: pr=3.253 gain=0.04995 f1_m=0.5067 f1_u=0.5067 kl_final=0.001166 kl=0.001092
+  base lr=0.0003: pr=4.002 gain=0.173 f1_m=0.4741 f1_u=0.4738 kl_final=0.0004132 kl=0.0005218
+  base lr=0.001: pr=2.371 gain=0.3808 f1_m=0.517 f1_u=0.5168 kl_final=0.0004702 kl=0.0005905
+  nomlp lr=0.0001: pr=3.151 gain=0.03101 f1_m=0.4985 f1_u=0.4985 kl_final=0.001529 kl=0.001599
+  nomlp lr=0.0003: pr=3.245 gain=0.05067 f1_m=0.4613 f1_u=0.4612 kl_final=0.001339 kl=0.001412
+  nomlp lr=0.001: pr=2.642 gain=0.3564 f1_m=0.5064 f1_u=0.5063 kl_final=0.001398 kl=0.001563
+  preln lr=0.0001: pr=3.201 gain=0.04352 f1_m=0.4597 f1_u=0.4595 kl_final=0.001255 kl=0.001108
+  preln lr=0.0003: pr=4.248 gain=0.2161 f1_m=0.4844 f1_u=0.4842 kl_final=0.0005344 kl=0.0006017
+  preln lr=0.001: pr=2.553 gain=0.375 f1_m=0.5477 f1_u=0.5476 kl_final=0.000525 kl=0.0005559

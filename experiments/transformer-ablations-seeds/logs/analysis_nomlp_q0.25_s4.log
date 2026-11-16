@@ -1,0 +1,15 @@
+step_000000 {'L0.resid_pre': 2.95, 'L0.attn_out': 3.748, 'L0.resid_mid': 3.031, 'L0.resid_post': 3.031}
+step_000001 {'L0.resid_pre': 2.95, 'L0.attn_out': 3.664, 'L0.resid_mid': 3.029, 'L0.resid_post': 3.029}
+step_000002 {'L0.resid_pre': 2.95, 'L0.attn_out': 3.629, 'L0.resid_mid': 3.028, 'L0.resid_post': 3.028}
+step_000005 {'L0.resid_pre': 2.95, 'L0.attn_out': 3.6, 'L0.resid_mid': 3.032, 'L0.resid_post': 3.032}
+step_000010 {'L0.resid_pre': 2.95, 'L0.attn_out': 3.153, 'L0.resid_mid': 3.054, 'L0.resid_post': 3.054}
+step_000020 {'L0.resid_pre': 2.949, 'L0.attn_out': 2.921, 'L0.resid_mid': 3.061, 'L0.resid_post': 3.061}
+step_000050 {'L0.resid_pre': 2.948, 'L0.attn_out': 3.652, 'L0.resid_mid': 3.033, 'L0.resid_post': 3.033}
+step_000100 {'L0.resid_pre': 2.948, 'L0.attn_out': 2.531, 'L0.resid_mid': 3.026, 'L0.resid_post': 3.026}
+step_000200 {'L0.resid_pre': 2.948, 'L0.attn_out': 2.25, 'L0.resid_mid': 3.083, 'L0.resid_post': 3.083}
+step_000500 {'L0.resid_pre': 2.95, 'L0.attn_out': 1.697, 'L0.resid_mid': 3.092, 'L0.resid_post': 3.092}
+step_001000 {'L0.resid_pre': 2.952, 'L0.attn_out': 1.479, 'L0.resid_mid': 3.116, 'L0.resid_post': 3.116}
+step_002000 {'L0.resid_pre': 2.954, 'L0.attn_out': 1.41, 'L0.resid_mid': 3.059, 'L0.resid_post': 3.059}
+step_005000 {'L0.resid_pre': 2.957, 'L0.attn_out': 1.41, 'L0.resid_mid': 3.011, 'L0.resid_post': 3.011}
+step_010000 {'L0.resid_pre': 2.964, 'L0.attn_out': 1.632, 'L0.resid_mid': 3.217, 'L0.resid_post': 3.217}
+step_020000 {'L0.resid_pre': 2.968, 'L0.attn_out': 2.78, 'L0.resid_mid': 2.99, 'L0.resid_post': 2.99}
