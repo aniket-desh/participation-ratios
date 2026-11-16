@@ -42,4 +42,4 @@ Written for Aniket, who was away. This file is updated as the work goes; the new
 
 ## Spend
 
-All six GPU experiments ran on single A40s at $0.59/hr: about $4.24 in total (from `EXPERIMENTS.md`), against $150 allowed and $25 per worker. No worker of this project is left running (`orch ls`), and nothing is waiting to be collected. See `EXPERIMENTS.md` for per-experiment times and costs.
+All five GPU experiments (Batches 2, 2b, 3, 3b and 4) ran on single A40s at $0.59/hr: about $3.64 in total (from `EXPERIMENTS.md`), against $150 allowed and $25 per worker. No worker of this project is left running (`orch ls`), and nothing is waiting to be collected. See `EXPERIMENTS.md` for per-experiment times and costs.
