@@ -1,7 +1,7 @@
 ---
 name: transformer-ablations-seeds
 title: Batch 3b: seeds 3-5 for the architecture ablations, graded on six seeds
-status: approved
+status: done
 gpu: NVIDIA A40,NVIDIA RTX A6000,NVIDIA GeForce RTX 5090,NVIDIA A100 80GB PCIe
 count: 1
 hours: 3
@@ -10,6 +10,9 @@ disk_gb: 40
 data:
 secrets:
 approved_utc: 2026-11-15T23:26:11Z
+result: supported
+finished_utc: 2026-11-16T00:54:30Z
+writeup: experiments/transformer-ablations-seeds/README.md
 ---
 
 # Batch 3b: seeds 3-5 for the architecture ablations, graded on six seeds
@@ -95,4 +98,9 @@ None.
 
 ## Outcome
 
-Not run yet.
+**Supported**: every one of Batch 3's verdicts holds on six seeds. Write-up: [README.md](README.md).
+- Run success: 18 of 18 runs finished with analysis at step 20,000 (criterion: at least 16).
+- Six-seed verdicts: all 8 equal Batch 3's (A1, A2, A2-within-pre-LN and A3, each on belief and PR), so all 8 are robust and none is fragile.
+- Seeds 3–5 alone: 7 of 8 agree with Batch 3. Within-pre-LN PR is supported on seeds 3–5 against inconclusive on seeds 0–2 and on seeds 0–5.
+- Attention-only at q2 = 0.8: 0 of 3 new seeds pass the prediction-quality bar (0 of 6 overall), so A1 stays undefined there.
+- Cost and time: one A40, 1 h 21 min, about $0.80, against a 3 h cap and an $8 budget.
