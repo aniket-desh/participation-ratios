@@ -2,6 +2,8 @@
 
 This project asks whether the covariance spectrum of a trained transformer's residual stream, summarized by its participation ratio $\mathrm{PR}(C)=(\operatorname{tr}C)^2/\operatorname{tr}(C^2)$, can be predicted from the statistics of the sequence generator it was trained on together with a specified learning theory. Beliefs being decodable is not the target. The target is a prediction of a nonconstant spectrum or PR curve, made before the tested runs, that survives held-out generator conditions, seeds and widths. The primary testbed is a generator with two independent binary hidden factors and a four-token vocabulary, for which filtering, belief covariance and several learning baselines are exactly computable.
 
+**Results so far** are synthesized in [`writeup/README.md`](writeup/README.md), which covers all nine experiments, the parts of the theory each one confirms or refutes, and the intuitions behind them.
+
 ## Documents
 
 The three planning documents live in [`docs/`](docs/). They overlap by design: the roadmap states each calculation briefly, the derivations prove it step by step, and the experiment plan turns it into staged tests with gates. They are kept whole rather than merged so that each still reads on its own; the table below maps where each topic is treated.
